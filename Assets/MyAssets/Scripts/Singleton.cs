@@ -7,6 +7,11 @@ using UnityEngine;
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     /// <summary>
+    /// ture : DontDestroyOnLoadの対象にする
+    /// </summary>
+    private bool _isDontDestroyOnLoad = false;
+
+    /// <summary>
     /// Inspector上に出ているシングルトンのコンポーネントインスタンス
     /// </summary>
     private static T _I = default;
@@ -30,10 +35,10 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
-
-
-    [SerializeField, Tooltip("ture : DontDestroyOnLoadの対象にする")]
-    private bool _isDontDestroyOnLoad = false;
+    /// <summary>
+    /// ture : DontDestroyOnLoadの対象にする
+    /// </summary>
+    public bool IsDontDestroyOnLoad { get => _isDontDestroyOnLoad; set => _isDontDestroyOnLoad = value; }
 
 
     protected virtual void Awake()
@@ -43,7 +48,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
         //登録されているシングルトンコンポーネントが自分のインスタンスと同じなら、DontDestroyOnLoadに登録する
         //異なれば、自分を破棄する
-        if (this == _I) DontDestroyOnLoad(this.gameObject);
-        else Destroy(this.gameObject);
+        if (_I && this != _I)  Destroy(this.gameObject);
+        else DontDestroyOnLoad(this.gameObject);
     }
 }
