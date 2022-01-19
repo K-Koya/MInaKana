@@ -15,7 +15,6 @@ public class PlayerStatus : CharacterStatus , ICSVDataConverter
     public const string PARAMETER_NAME_SP = "SP";
     #endregion
 
-    [Header("プレイヤーキャラクター固有の追加ステータス")]
     [SerializeField, Tooltip("最大SP(スペシャルアタックの消費ポイント)")]
     short _SPInitial = 100;
 
@@ -29,6 +28,7 @@ public class PlayerStatus : CharacterStatus , ICSVDataConverter
     public short SPCurrent { get => _SPCurrent; set => _SPCurrent = value; }
     /// <summary> 二人のプレイヤー情報を静的保管 </summary>
     public static List<PlayerStatus> Players { get => _players; }
+    
     #endregion
 
 
@@ -56,13 +56,16 @@ public class PlayerStatus : CharacterStatus , ICSVDataConverter
         //データテーブルよりステータス一式を取得
         List<string> data = DataTableCharacter.I.GetDataUsingName(_Name);
 
+        //ID番号取得
+        _CharacterNumber = byte.Parse(data[1]);
+
         //計算したうえで格納
-        _HPInitial = short.Parse(data[1]);
-        _SPInitial = short.Parse(data[2]);
-        _Attack = short.Parse(data[3]);
-        _Defense = short.Parse(data[4]);
-        _Rapid = short.Parse(data[5]);
-        _Technique = short.Parse(data[6]);
+        _HPInitial = short.Parse(data[2]);
+        _SPInitial = short.Parse(data[3]);
+        _Attack = short.Parse(data[4]);
+        _Defense = short.Parse(data[5]);
+        _Rapid = short.Parse(data[6]);
+        _Technique = short.Parse(data[7]);
     }
 
     void ICSVDataConverter.CSVToMembers(List<string> csv)
@@ -75,3 +78,4 @@ public class PlayerStatus : CharacterStatus , ICSVDataConverter
         throw new System.NotImplementedException();
     }
 }
+

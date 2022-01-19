@@ -1,8 +1,7 @@
 using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 /// <summary>
 /// GUI上のHPとSP表示を実際のステータス値通りに反映する
@@ -56,14 +55,14 @@ public class GUIManagerForHPSP : MonoBehaviour
         //数値に変化があればGUIも更新
         if(_BeforeHPCurrent != _HPCurrent)
         {
-            _HPGauge.fillAmount = _HPCurrent / (float)_HPInitial;
-            _HPValue.text = _HPCurrent + " / " + _HPInitial;
+            _HPGauge.DOFillAmount(_HPCurrent / (float)_HPInitial, 0.2f);
+            _HPValue.DOText(_HPCurrent + " / " + _HPInitial, 0.2f);
             _BeforeHPCurrent = _HPCurrent;
         }
         if (_BeforeSPCurrent != _SPCurrent)
         {
-            _SPGauge.fillAmount = _SPCurrent / (float)_SPInitial;
-            _SPValue.text = _SPCurrent + " / " + _SPInitial;
+            _SPGauge.DOFillAmount(_SPCurrent / (float)_SPInitial, 0.2f);
+            _SPValue.DOText(_SPCurrent + " / " + _SPInitial, 0.2f);
             _BeforeSPCurrent = _SPCurrent;
         }
     }

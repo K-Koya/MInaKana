@@ -43,9 +43,21 @@ public abstract class CharacterStatus : MonoBehaviour
     [SerializeField, Tooltip("敏捷性")]
     protected short _Rapid = 100;
 
+    [SerializeField, Tooltip("敏捷性蓄積値")]
+    protected short _RapidAccumulation = 0;
+
     [SerializeField, Tooltip("技術力")]
     protected short _Technique = 100;
     #endregion
+
+    /// <summary> キャラクター番号 </summary>
+    protected byte _CharacterNumber = 0;
+
+    [SerializeField, Tooltip("true : このキャラクターのターン")]
+    protected bool _IsMyTurn = false;
+
+    [SerializeField, Tooltip("キャラクターの原点位置から頭上位置までの鉛直軸のオフセット")]
+    protected float _OffsetHeadPoint = 1.0f;
 
     #region プロパティ
     /// <summary> キャラクター名 </summary>
@@ -60,7 +72,15 @@ public abstract class CharacterStatus : MonoBehaviour
     public short Defense { get => _Defense; }
     /// <summary> 敏捷性 </summary>
     public short Rapid { get => _Rapid; }
+    /// <summary> 敏捷性蓄積値 </summary>
+    public short RapidAccumulation { get => _RapidAccumulation; set => _RapidAccumulation = value; }
     /// <summary> 技術力 </summary>
     public short Technique { get => _Technique; }
+    /// <summary> true : このキャラクターのターン </summary>
+    public bool IsMyTurn { get => _IsMyTurn; set => _IsMyTurn = value; }
+    /// <summary> キャラクターの原点位置から頭上位置までの鉛直軸のオフセット </summary>
+    public Vector3 HeadPoint { get => transform.position + (transform.up * _OffsetHeadPoint); }
+    /// <summary> キャラクター番号 </summary>
+    public byte Number { get => _CharacterNumber; }
     #endregion
 }

@@ -12,6 +12,9 @@ public class EnemyStatus : CharacterStatus
         //データテーブルよりステータス一式を取得
         List<string> data = DataTableCharacter.I.GetDataUsingName(_Name);
 
+        //ID番号取得
+        _CharacterNumber = byte.Parse(data[1]);
+
         //格納
         _HPInitial = short.Parse(data[1]);
         _HPCurrent = _HPInitial;

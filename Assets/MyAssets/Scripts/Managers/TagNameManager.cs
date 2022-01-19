@@ -10,27 +10,42 @@ public class TagNameManager : Singleton<TagNameManager>
 
     #region メンバ
     [SerializeField, Tooltip("メインカメラタグ名")]
-    private string _buttonNameMainCamera = "MainCamera";
+    private string _TagNameMainCamera = "MainCamera";
 
     [SerializeField, Tooltip("先頭プレイヤータグ名")]
-    private string _buttonNamePlayer = "Player";
+    private string _TagNamePlayer = "Player";
 
     [SerializeField, Tooltip("後尾プレイヤータグ名")]
-    private string _buttonNameAllies = "Allies";
+    private string _TagNameAllies = "Allies";
 
     [SerializeField, Tooltip("敵タグ名")]
-    private string _buttonNameEnemy = "Enemy";
+    private string _TagNameEnemy = "Enemy";
+
+    [SerializeField, Tooltip("先頭プレイヤーの原点位置タグ名")]
+    private string _TagNamePlayerBase = "PlayerBase";
+
+    [SerializeField, Tooltip("後尾プレイヤーの原点位置タグ名")]
+    private string _TagNameAlliesBase = "AlliesBase";
+
+    [SerializeField, Tooltip("敵の原点位置タグ名")]
+    private string _TagNameEnemyBase = "EnemyBase";
     #endregion
 
     #region プロパティ
     /// <summary> メインカメラタグ名 </summary>
-    public string ButtonNameMainCamera { get => _buttonNameMainCamera; }
+    public string TagNameMainCamera { get => _TagNameMainCamera; }
     /// <summary> 先頭プレイヤータグ名 </summary>
-    public string ButtonNamePlayer { get => _buttonNamePlayer; }
+    public string TagNamePlayer { get => _TagNamePlayer; }
     /// <summary> 後尾プレイヤータグ名 </summary>
-    public string ButtonNameAllies { get => _buttonNameAllies; }
+    public string TagNameAllies { get => _TagNameAllies; }
     /// <summary> 敵タグ名 </summary>
-    public string ButtonNameEnemy { get => _buttonNameEnemy; }
+    public string TagNameEnemy { get => _TagNameEnemy; }
+    /// <summary> 先頭プレイヤーの原点位置タグ名 </summary>
+    public string TagNamePlayerBase { get => _TagNamePlayerBase; }
+    /// <summary> 後尾プレイヤーの原点位置タグ名 </summary>
+    public string TagNameAlliesBase { get => _TagNameAlliesBase; }
+    /// <summary> 敵プレイヤーの原点位置タグ名 </summary>
+    public string TagNameEnemyBase { get => _TagNameEnemyBase; }
     #endregion
 
     protected override void Awake()
