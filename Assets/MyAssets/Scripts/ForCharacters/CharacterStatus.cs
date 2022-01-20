@@ -59,6 +59,12 @@ public abstract class CharacterStatus : MonoBehaviour
     [SerializeField, Tooltip("キャラクターの原点位置から頭上位置までの鉛直軸のオフセット")]
     protected float _OffsetHeadPoint = 1.0f;
 
+    [SerializeField, Tooltip("true : 戦えなくなった")]
+    protected bool _IsDefeated = false;
+
+    /// <summary> キャラクターのダメージ表示 </summary>
+    protected GUIVisualizeChangeLife _VisualizeChangeLife = default;
+
     #region プロパティ
     /// <summary> キャラクター名 </summary>
     public string Name { get => _Name; }
@@ -82,5 +88,66 @@ public abstract class CharacterStatus : MonoBehaviour
     public Vector3 HeadPoint { get => transform.position + (transform.up * _OffsetHeadPoint); }
     /// <summary> キャラクター番号 </summary>
     public byte Number { get => _CharacterNumber; }
+    /// <summary> true : 戦えなくなった </summary>
+    public bool IsDefeated { get => _IsDefeated; }
     #endregion
+
+
+
+    virtual protected void Start()
+    {
+        _VisualizeChangeLife = GetComponentInChildren<GUIVisualizeChangeLife>();
+    }
+
+    /// <summary>
+    /// 自キャラにダメージを反映
+    /// </summary>
+    /// <param name="attack"> 攻撃力 </param>
+    /// <param name="ratio"> 威力補正 </param>
+    public void GaveDamage(int attack, float ratio)
+    {
+        //ダメージ計算
+        int damage = (int)(calculateDamage(_Defense - attack) * ratio);
+
+        //ダメージ表示
+        _VisualizeChangeLife.Damage(damage, transform.position);
+
+        //ダメージ分減算
+        _HPCurrent  = (short)Mathf.Max(0, _HPCurrent - damage);
+
+        //HPが残っていない
+        if(_HPCurrent < 1)
+        {
+            //倒された状態に
+            _IsDefeated = true;
+
+            //倒された時にする処理
+            DefeatProcess();
+        }
+    }
+
+    /// <summary>
+    /// (攻撃側の攻撃能力値 - 防御側の防御能力値)をした時の差から、威力補正1.0の時のベースとなるダメージ値を算出
+    /// -150の時に10、150の時に80とする
+    /// </summary>
+    /// <param name="subtraction">攻撃側の攻撃能力値 - 防御側の防御能力値</param>
+    /// <returns>威力補正1.0の時のベースとなるダメージ値</returns>
+    int calculateDamage(int subtraction)
+    {
+        //傾き
+        float tilt = 70f / 300f;  // (80 - 10) / (150 - (-150))
+        //切片
+        float segment = 45f;      // 80 - (150 * tilt)
+
+        //傾き、切片、能力値差よりベースのダメージ値を算出
+        return (int)((subtraction * tilt) + segment);
+    }
+
+    /// <summary>
+    /// 倒されたときに実行させる処理
+    /// </summary>
+    protected virtual void DefeatProcess()
+    {
+
+    }
 }

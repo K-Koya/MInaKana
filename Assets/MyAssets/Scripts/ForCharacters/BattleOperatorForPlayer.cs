@@ -10,7 +10,7 @@ using DG.Tweening;
 public class BattleOperatorForPlayer : BattleOperator
 {
     /// <summary> 判定表示 </summary>
-    private GUIEvaluation _Display = default;
+    private GUIEvaluation _Evaluation = default;
 
     /// <summary> 今の入力判定 </summary>
     private InputEvaluation _NowEvaluation = InputEvaluation.Initial;
@@ -21,7 +21,7 @@ public class BattleOperatorForPlayer : BattleOperator
     protected override void Start()
     {
         base.Start();
-        _Display = FindObjectOfType<GUIEvaluation>();
+        _Evaluation = FindObjectOfType<GUIEvaluation>();
     }
 
     /// <summary>
@@ -112,11 +112,14 @@ public class BattleOperatorForPlayer : BattleOperator
         yield return StartCoroutine(InputEvaluater(1.5f, 0f, 0f, 0.1f, 0.2f));
 
         //判定表示
-        _Display.DoAnimation(_InputResult, target.HeadPoint);
+        _Evaluation.DoAnimation(_InputResult, target.HeadPoint);
 
         //入力判定がGood
         if (_InputResult > InputEvaluation.OK)
         {
+            //ダメージ発生
+            target.GaveDamage(_Status.Attack, 0.5f);
+
             //入力状態初期化
             _InputResult = InputEvaluation.Initial;
             //2回目のジャンプで入力を再評価
@@ -127,11 +130,14 @@ public class BattleOperatorForPlayer : BattleOperator
             yield return StartCoroutine(InputEvaluater(0.5f, 0.1f, 0.2f));
 
             //判定表示
-            _Display.DoAnimation(_InputResult, target.HeadPoint);
+            _Evaluation.DoAnimation(_InputResult, target.HeadPoint);
 
             //入力判定がExcellent
             if (_InputResult == InputEvaluation.Excellent)
             {
+                //ダメージ発生
+                target.GaveDamage(_Status.Attack, 1f);
+
                 sequence = DOTween.Sequence().Append(transform.DOJump(target.transform.position + (Vector3.forward * 5f), 2.0f, 1, 0.5f).SetEase(Ease.Linear));
                 sequence.Append(transform.DOMove(_BasePosition + Vector3.back * 3f, 0.05f).SetEase(Ease.INTERNAL_Zero));
                 sequence.Append(transform.DOMove(_BasePosition, 0.3f).SetEase(Ease.Linear));
@@ -140,6 +146,9 @@ public class BattleOperatorForPlayer : BattleOperator
             //入力判定がGreat
             else if (_InputResult == InputEvaluation.Great)
             {
+                //ダメージ発生
+                target.GaveDamage(_Status.Attack, 0.8f);
+
                 sequence = DOTween.Sequence().Append(transform.DOJump(jumpPoint, 2.0f, 1, 0.5f).SetEase(Ease.Linear));
                 sequence.Append(transform.DOMove(_BasePosition, 1f).SetEase(Ease.Linear));
                 sequence.Play();
@@ -147,6 +156,9 @@ public class BattleOperatorForPlayer : BattleOperator
             //入力判定がMiss
             else
             {
+                //ダメージ発生
+                target.GaveDamage(_Status.Attack, 0.4f);
+
                 sequence = DOTween.Sequence().Append(transform.DOJump(jumpPoint, 1.5f, 1, 0.5f).SetEase(Ease.Linear));
                 sequence.Append(transform.DOMove(_BasePosition, 1f).SetEase(Ease.Linear));
                 sequence.Play();
@@ -155,6 +167,9 @@ public class BattleOperatorForPlayer : BattleOperator
         //入力判定がOK
         else if(_InputResult == InputEvaluation.OK)
         {
+            //ダメージ発生
+            target.GaveDamage(_Status.Attack, 0.25f);
+
             sequence = DOTween.Sequence().Append(transform.DOJump(jumpPoint, 1.5f, 1, 0.5f).SetEase(Ease.Linear));
             sequence.Append(transform.DOMove(_BasePosition, 1f).SetEase(Ease.Linear));
             sequence.Play();
@@ -162,6 +177,9 @@ public class BattleOperatorForPlayer : BattleOperator
         //入力判定がMiss
         else
         {
+            //ダメージ発生
+            target.GaveDamage(_Status.Attack, 0.1f);
+
             sequence = DOTween.Sequence().Append(transform.DOJump(jumpPoint, 1.0f, 2, 1.0f).SetEase(Ease.OutCubic));
             sequence.Append(transform.DOMove(_BasePosition, 1f).SetEase(Ease.Linear));
             sequence.Play();
