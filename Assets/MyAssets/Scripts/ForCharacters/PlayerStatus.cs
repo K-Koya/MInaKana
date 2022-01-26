@@ -23,9 +23,9 @@ public class PlayerStatus : CharacterStatus , ICSVDataConverter
 
     #region プロパティ
     /// <summary> 最大SP </summary>
-    public short SPInitial { get => _SPInitial; set => _SPInitial = value; }
+    public override short SPInitial { get => _SPInitial; set => _SPInitial = value; }
     /// <summary> 現在SP </summary>
-    public short SPCurrent { get => _SPCurrent; set => _SPCurrent = value; }
+    public override short SPCurrent { get => _SPCurrent; set => _SPCurrent = value; }
     /// <summary> 二人のプレイヤー情報を静的保管 </summary>
     public static List<PlayerStatus> Players { get => _players; }
     

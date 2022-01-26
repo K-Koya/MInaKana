@@ -62,8 +62,12 @@ public abstract class CharacterStatus : MonoBehaviour
     [SerializeField, Tooltip("true : 戦えなくなった")]
     protected bool _IsDefeated = false;
 
-    /// <summary> キャラクターのダメージ表示 </summary>
-    protected GUIVisualizeChangeLife _VisualizeChangeLife = default;
+    /// <summary> ダメージを受けた時のダメージ表示をさせる処理 </summary>
+    /// <param name="damage"> 受けたダメージ </param>
+    /// <param name="position"> 表示位置 </param>
+    protected delegate void VD(int damage, Vector3 position);
+    /// <summary> ダメージを受けた時のダメージ表示をさせる処理 </summary>
+    protected VD VisualizeDamage;
 
     #region プロパティ
     /// <summary> キャラクター名 </summary>
@@ -90,13 +94,18 @@ public abstract class CharacterStatus : MonoBehaviour
     public byte Number { get => _CharacterNumber; }
     /// <summary> true : 戦えなくなった </summary>
     public bool IsDefeated { get => _IsDefeated; }
+    /// <summary> 最大SP(プレイヤーのみ) </summary>
+    public virtual short SPInitial { get; set; }
+    /// <summary> 現在SP(プレイヤーのみ)  </summary>
+    public virtual short SPCurrent { get; set; }
     #endregion
 
 
 
     virtual protected void Start()
     {
-        _VisualizeChangeLife = GetComponentInChildren<GUIVisualizeChangeLife>();
+        GUIVisualizeChangeLife _VisualizeChangeLife = GetComponentInChildren<GUIVisualizeChangeLife>();
+        VisualizeDamage = _VisualizeChangeLife.Damage;
     }
 
     /// <summary>
@@ -106,11 +115,11 @@ public abstract class CharacterStatus : MonoBehaviour
     /// <param name="ratio"> 威力補正 </param>
     public void GaveDamage(int attack, float ratio)
     {
-        //ダメージ計算
-        int damage = (int)(calculateDamage(_Defense - attack) * ratio);
+        //ダメージ計算(倍率0.95～1.05でダメージ変動あり)
+        int damage = (int)(calculateDamage(_Defense - attack) * ratio * Random.Range(0.95f, 1.05f));
 
         //ダメージ表示
-        _VisualizeChangeLife.Damage(damage, transform.position);
+        VisualizeDamage(damage, transform.position);
 
         //ダメージ分減算
         _HPCurrent  = (short)Mathf.Max(0, _HPCurrent - damage);
