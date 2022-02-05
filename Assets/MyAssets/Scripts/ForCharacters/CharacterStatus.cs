@@ -62,13 +62,6 @@ public abstract class CharacterStatus : MonoBehaviour
     [SerializeField, Tooltip("true : 戦えなくなった")]
     protected bool _IsDefeated = false;
 
-    /// <summary> ダメージを受けた時のダメージ表示をさせる処理 </summary>
-    /// <param name="damage"> 受けたダメージ </param>
-    /// <param name="position"> 表示位置 </param>
-    protected delegate void VD(int damage, Vector3 position);
-    /// <summary> ダメージを受けた時のダメージ表示をさせる処理 </summary>
-    protected VD VisualizeDamage;
-
     #region プロパティ
     /// <summary> キャラクター名 </summary>
     public string Name { get => _Name; }
@@ -101,31 +94,22 @@ public abstract class CharacterStatus : MonoBehaviour
     #endregion
 
 
-
-    virtual protected void Start()
-    {
-        GUIVisualizeChangeLife _VisualizeChangeLife = GetComponentInChildren<GUIVisualizeChangeLife>();
-        VisualizeDamage = _VisualizeChangeLife.Damage;
-    }
-
     /// <summary>
     /// 自キャラにダメージを反映
     /// </summary>
     /// <param name="attack"> 攻撃力 </param>
     /// <param name="ratio"> 威力補正 </param>
-    public void GaveDamage(int attack, float ratio)
+    /// <returns>ダメージ値</returns>
+    public int GaveDamage(int attack, float ratio)
     {
         //ダメージ計算(倍率0.95～1.05でダメージ変動あり)
         int damage = (int)(calculateDamage(_Defense - attack) * ratio * Random.Range(0.95f, 1.05f));
 
-        //ダメージ表示
-        VisualizeDamage(damage, transform.position);
-
         //ダメージ分減算
-        _HPCurrent  = (short)Mathf.Max(0, _HPCurrent - damage);
+        _HPCurrent = (short)Mathf.Max(0, _HPCurrent - damage);
 
         //HPが残っていない
-        if(_HPCurrent < 1)
+        if (_HPCurrent < 1)
         {
             //倒された状態に
             _IsDefeated = true;
@@ -133,6 +117,8 @@ public abstract class CharacterStatus : MonoBehaviour
             //倒された時にする処理
             DefeatProcess();
         }
+
+        return damage;
     }
 
     /// <summary>
@@ -150,6 +136,12 @@ public abstract class CharacterStatus : MonoBehaviour
 
         //傾き、切片、能力値差よりベースのダメージ値を算出
         return (int)((subtraction * tilt) + segment);
+    }
+
+
+    virtual protected void Start()
+    {
+        
     }
 
     /// <summary>

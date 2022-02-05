@@ -39,7 +39,7 @@ public enum InputEvaluation : byte
 }
 
 /// <summary> コマンド効果の対象 </summary>
-public enum TargetType
+public enum TargetType : byte
 {
     /// <summary> 味方 </summary>
     Allies,
@@ -60,43 +60,44 @@ public class BattleOperatorForPlayer : BattleOperator
 {
     #region メンバー変数
     [SerializeField, Tooltip("最上位コマンドカードメニューで選択中のもの")]
-    private FirstMenu _FirstMenu = FirstMenu.Solo;
+    FirstMenu _FirstMenu = FirstMenu.Solo;
 
     [SerializeField, Tooltip("二番目のコマンドメニューの選択候補コマンドリスト")]
-    private List<CommandBase> _SecondMenu = default;
+    List<CommandBase> _SecondMenu = default;
 
     [SerializeField, Tooltip("二番目のコマンドメニューの選択番号")]
-    private byte _SecondMenuIndex = 0;
+    byte _SecondMenuIndex = 0;
 
     [SerializeField, Tooltip("選択候補コマンド")]
-    private CommandBase _Candidate = default;
+    CommandBase _Candidate = default;
 
     [SerializeField, Tooltip("コマンドを実施する対象の選択番号")]
-    private byte _TargetIndex = 0;
+    byte _TargetIndex = 0;
 
     /// <summary> 判定表示 </summary>
-    private GUIEvaluation _Evaluation = default;
+    GUIEvaluation _Evaluation = default;
 
     /// <summary> 今の入力判定 </summary>
-    private InputEvaluation _NowEvaluation = InputEvaluation.Initial;
+    InputEvaluation _NowEvaluation = InputEvaluation.Initial;
 
     /// <summary> 入力結果 </summary>
-    private InputEvaluation _InputResult = InputEvaluation.Initial;
+    InputEvaluation _InputResult = InputEvaluation.Initial;
 
     /// <summary> ソロアタック(一人で攻撃)コマンドのリスト </summary>
-    private List<CommandBase> _SoloAttacks = new List<CommandBase>();
+    List<CommandBase> _SoloAttacks = new List<CommandBase>();
 
     /// <summary> ツインズアタック(二人で攻撃)コマンドのリスト </summary>
-    private List<CommandBase> _TwinsAttacks = new List<CommandBase>();
+    List<CommandBase> _TwinsAttacks = new List<CommandBase>();
 
     /// <summary> アイテム使用コマンドのリスト </summary>
-    private List<CommandBase> _Items = new List<CommandBase>();
+    List<CommandBase> _Items = new List<CommandBase>();
 
     /// <summary> 逃げるコマンド </summary>
-    private CommandBase _LeaveCommand = default;
+    CommandBase _LeaveCommand = default;
 
     /// <summary> 今は行動せず先送りするコマンドのリスト </summary>
-    private List<CommandBase> _PassCommands = new List<CommandBase>();
+    List<CommandBase> _PassCommands = new List<CommandBase>();
+
     #endregion
 
     #region プロパティ
@@ -114,6 +115,8 @@ public class BattleOperatorForPlayer : BattleOperator
     public int SecondMenuIndex { get => _SecondMenuIndex; }
     /// <summary> コマンドを実施する対象の選択番号 </summary>
     public int TargetIndex { get => _TargetIndex; }
+    /// <summary> キャラクターの攻撃力 </summary>
+    public int AttackStatus { get => _Status.Attack; }
     #endregion
 
     protected override void Start()
@@ -252,15 +255,15 @@ public class BattleOperatorForPlayer : BattleOperator
                         switch (_Candidate.Target)
                         {
                             case TargetType.OneEnemy:
-                                _RunningCommand = StartCoroutine(_Candidate.Run(_Enemies[_TargetIndex - 1]));
+                                _RunningCommand = StartCoroutine(_Candidate.Run(ActiveEnemies[_TargetIndex - 1]));
                                 break;
                             case TargetType.AllEnemies:
-                                _RunningCommand = StartCoroutine(_Candidate.Run(_Enemies));
+                                _RunningCommand = StartCoroutine(_Candidate.Run(ActiveEnemies));
                                 break;
                             case TargetType.OneByOneEnemies:
                                 //敵ステータス一覧に対し、選択した敵が先頭に来るように入れ替え
-                                List<EnemyStatus> list = _Enemies.ToList();
-                                list.Insert(0, _Enemies[_TargetIndex]);
+                                List<BattleOperatorForEnemy> list = ActiveEnemies.ToList();
+                                list.Insert(0, ActiveEnemies[_TargetIndex]);
                                 list.RemoveAt(_TargetIndex);
                                 _RunningCommand = StartCoroutine(_Candidate.Run(list.ToArray()));
                                 break;
@@ -273,6 +276,33 @@ public class BattleOperatorForPlayer : BattleOperator
                 }
             }
         }
+        else
+        {
+            _SecondMenu = null;
+            _SecondMenuIndex = 0;
+            _Candidate = null;
+            _TargetIndex = 0;
+        }
+    }
+
+    /// <summary>
+    /// 相手の行動でカウンター行動を受け付ける
+    /// </summary>
+    protected override void OperateCounter()
+    {
+        //ジャンプ回避
+        if (InputAssistant.GetDownJump(_Status.Number))
+        {
+            (_Status as PlayerStatus).DoJump(1f);
+        }   
+    }
+
+    /// <summary>
+    /// ジャンプ攻撃のカウンター成功時の踏みつけジャンプ
+    /// </summary>
+    public void DoTrample(float powerRatio)
+    {
+        (_Status as PlayerStatus).DoJump(powerRatio, true);
     }
 
     /// <summary>
@@ -326,25 +356,15 @@ public class BattleOperatorForPlayer : BattleOperator
 
     #region コマンド動作に利用するメソッド群(CommandBase派生クラスのActionに代入して利用)
 
-    /// <summary>
-    /// コマンド選択リストから、コマンドカード選択へ戻る
-    /// </summary>
-    IEnumerator BackFromCommand(params CharacterStatus[] targets)
-    {
-        _TargetIndex = 0;
-        _Candidate = null;
-        _SecondMenu = null;
-        yield return null;
-    }
 
     /// <summary>
     /// ジャンプ攻撃用シーケンス
     /// </summary>
     /// <param name="target">攻撃対象</param>
-    IEnumerator JumpAttack(params CharacterStatus[] targets)
+    IEnumerator JumpAttack(params BattleOperator[] targets)
     {
         //対象を1体に絞る
-        CharacterStatus target = targets[0];
+        BattleOperator target = targets[0];
 
         //攻撃前に少しのインターバル
         yield return new WaitForSeconds(0.5f);
@@ -450,7 +470,6 @@ public class BattleOperatorForPlayer : BattleOperator
 }
 
 /// <summary> 全コマンド基底クラス </summary>
-[Serializable]
 public abstract class CommandBase
 {
     #region メンバー
@@ -489,7 +508,7 @@ public abstract class CommandBase
     #endregion
 
     /// <summary> コマンド実行時に走らせる動作の委譲メソッド </summary>
-    public delegate IEnumerator CommandCorotine(params CharacterStatus[] targets);
+    public delegate IEnumerator CommandCorotine(params BattleOperator[] targets);
     /// <summary> コマンド実行時に走らせる動作の委譲メンバー(上位のBattleOperatorForPlayerクラスにて紐づけ) </summary>
     public CommandCorotine Run;
 

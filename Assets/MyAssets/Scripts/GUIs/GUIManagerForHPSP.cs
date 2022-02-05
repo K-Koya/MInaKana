@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
@@ -46,12 +47,15 @@ public class GUIManagerForHPSP : MonoBehaviour
     void Start()
     {
         //名前が_Nameのキャラクターのステータスを取得する
-        _status = PlayerStatus.Players.Where(p => p.Name == _Name).First();
+        List<PlayerStatus> players = PlayerStatus.Players;
+        if(players.Count > 0) _status = players.Where(p => p.Name == _Name).First();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (_status == null) return;
+
         //数値に変化があればGUIも更新
         if(_BeforeHPCurrent != _HPCurrent)
         {

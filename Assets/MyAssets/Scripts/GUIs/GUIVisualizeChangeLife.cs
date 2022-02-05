@@ -7,6 +7,9 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Sprite)), RequireComponent(typeof(Animator))]
 public class GUIVisualizeChangeLife : MonoBehaviour
 {
+    [SerializeField, Tooltip("被ダメージ時のアニメーション名")]
+    string _DamagedEffectAnimationName = "DamagedEffect";
+
     /// <summary> ダメージを数値表示するテキスト </summary>
     Text _ValueText = default;
 
@@ -30,6 +33,6 @@ public class GUIVisualizeChangeLife : MonoBehaviour
 
         //指定位置で再生
         transform.position = position;
-        _Animator.Play("DamagedEffect", 0, 0);
+        _Animator.Play(_DamagedEffectAnimationName, 0, 0);
     }
 }

@@ -47,6 +47,9 @@ public class GUICommandMotion : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //戦闘中でなければ実行しない
+        if (BattleManager.Situation != BattleSituation.OnBattle) return;
+
         //自分のターンでない
         if (!_BattleOperator.IsMyTurn) return;
         //コマンド実行中である
@@ -158,21 +161,21 @@ public class GUICommandMotion : MonoBehaviour
     {
         //ターゲットリストを取得
         int numberOfTarget = 0;
-        CharacterStatus[] targetStatus = default;
+        BattleOperator[] target = default;
         switch (_BattleOperator.Candidate.Target)
         {
             case TargetType.OneEnemy:
             case TargetType.OneByOneEnemies:
-                targetStatus = _BattleOperator.Enemies;
-                numberOfTarget = targetStatus.Length + 1;
+                target = _BattleOperator.ActiveEnemies;
+                numberOfTarget = target.Length + 1;
                 break;
             case TargetType.AllEnemies:
-                targetStatus = _BattleOperator.Enemies;
+                target = _BattleOperator.ActiveEnemies;
                 numberOfTarget = 2;
                 break;
             case TargetType.Allies:
-                targetStatus = _BattleOperator.Players;
-                numberOfTarget = targetStatus.Length + 1;
+                target = _BattleOperator.Players;
+                numberOfTarget = target.Length + 1;
                 break;
             default: break;
         }
@@ -189,7 +192,7 @@ public class GUICommandMotion : MonoBehaviour
             }
             else
             {
-                if (index > 0) _SecondMenuTexts[i].Show(targetStatus[index - 1].Name, "");
+                if (index > 0) _SecondMenuTexts[i].Show(target[index - 1].Name, "");
                 //戻るコマンド
                 else _SecondMenuTexts[i].Show("Back", "");
             }

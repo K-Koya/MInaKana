@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine;
 /// <summary>
 /// プレイヤーとなるキャラクターの能力値
 /// </summary>
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerStatus : CharacterStatus , ICSVDataConverter
 {
     /// <summary> 二人のプレイヤー情報を静的保管 </summary>
@@ -14,6 +16,15 @@ public class PlayerStatus : CharacterStatus , ICSVDataConverter
     /// <summary> パラメーター名:SP </summary>
     public const string PARAMETER_NAME_SP = "SP";
     #endregion
+
+    /// <summary> キャラクターのRigidbody </summary>
+    Rigidbody _RB = default;
+
+    [SerializeField, Tooltip("ジャンプ力")]
+    float _JumpPower = 15.0f;
+
+    [SerializeField, Tooltip("true : 地面についている")]
+    protected bool _IsGrounded = false;
 
     [SerializeField, Tooltip("最大SP(スペシャルアタックの消費ポイント)")]
     short _SPInitial = 100;
@@ -44,12 +55,26 @@ public class PlayerStatus : CharacterStatus , ICSVDataConverter
         CalculateParameters();
         _HPCurrent = _HPInitial;
         _SPCurrent = _SPInitial;
+        _RB = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (_IsMyTurn && _IsGrounded)
+        {
+            _RB.isKinematic = true;
+        }
+        else
+        {
+            _RB.isKinematic = false;
+        }
 
+        //重力落下
+        if (!_RB.isKinematic)
+        {
+            Vector3 gravityAccelarate = -transform.up * _JumpPower * 0.75f;
+            _RB.AddForce(gravityAccelarate, ForceMode.Acceleration);
+        }
     }
 
     void CalculateParameters()
@@ -67,6 +92,48 @@ public class PlayerStatus : CharacterStatus , ICSVDataConverter
         _Defense = short.Parse(data[5]);
         _Rapid = short.Parse(data[6]);
         _Technique = short.Parse(data[7]);
+    }
+
+    /// <summary>
+    /// ジャンプさせる
+    /// </summary>
+    /// <param name="powerRatio">ジャンプ力倍率</param>
+    /// <param name="canAirial">true : 空中でもジャンプが可能</param>
+    public void DoJump(float powerRatio, bool canAirial = false)
+    {
+        if (_IsGrounded || canAirial)
+        {
+            //落下速度を殺す
+            Vector3 velocity = Vector3.ProjectOnPlane(_RB.velocity, transform.up);
+            _RB.velocity = velocity;
+
+            //ジャンプ力を計算して加算
+            Vector3 jumpAccelarate = transform.up * _JumpPower * powerRatio;
+            _RB.AddForce(jumpAccelarate, ForceMode.VelocityChange);
+        }
+    }
+
+    /// <summary> 主に地面にいる判定に利用 </summary>
+    /// <param name="collision"></param>
+    private void OnCollisionStay(Collision collision)
+    {
+        //地形レイヤとの接触
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            //うち、足元付近での接触
+            Vector3[] points = collision.contacts.Select(c => c.point).ToArray();
+            if(points.Where(p => (p - (transform.position + transform.up * 0.1f)).y < 0).ToArray().Length > 0)
+            {
+                _IsGrounded = true;
+            }
+        }
+    }
+
+    /// <summary> 主に地面にいる判定に利用 </summary>
+    /// <param name="collision"></param>
+    private void OnCollisionExit(Collision collision)
+    {
+        _IsGrounded = false;
     }
 
     void ICSVDataConverter.CSVToMembers(List<string> csv)
