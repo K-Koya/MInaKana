@@ -21,12 +21,6 @@ public abstract class BattleOperator : MonoBehaviour
     /// <summary> 敵側の戦闘用コンポーネント </summary>
     protected BattleOperatorForEnemy[] _Enemies = default;
 
-    /// <summary> プレイヤー側のステータス </summary>
-    //protected PlayerStatus[] _Players = default;
-
-    /// <summary> 敵側のステータス </summary>
-    //protected EnemyStatus[] _Enemies = default;
-
     /// <summary> 各コマンド実行時に、施行する相手 </summary>
     protected List<CharacterStatus> _CommandTargets = new List<CharacterStatus>();
 
