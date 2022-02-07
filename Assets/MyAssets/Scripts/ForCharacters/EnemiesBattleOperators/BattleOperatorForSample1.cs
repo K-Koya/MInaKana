@@ -43,12 +43,12 @@ public class BattleOperatorForSample1 : BattleOperatorForEnemy
         GUIPlayersInputNavigation.JumpOrder(0, true, true);
 
         _IsAttacking = true;
-        float waitTime = 0.5f;//Random.Range(0.1f, 1f);
+        float waitTime = Random.Range(0.1f, 1f);
         bool isGaveCounter = false;
 
         //ターゲット正面に移動して一定時間待機
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(transform.DOMove(target.BasePosition + (target.transform.forward * 5f), 0.5f).SetEase(Ease.Linear));
+        sequence.Append(transform.DOMove(target.BasePosition + (target.transform.forward * 5f), 1f).SetEase(Ease.Linear));
         sequence.AppendInterval(waitTime);
         sequence.Play();
         yield return sequence.WaitForCompletion();

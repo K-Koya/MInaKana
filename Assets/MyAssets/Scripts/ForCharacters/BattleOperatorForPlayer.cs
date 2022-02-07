@@ -59,6 +59,9 @@ public enum TargetType : byte
 public class BattleOperatorForPlayer : BattleOperator
 {
     #region メンバー変数
+    /// <summary>true : 自分のターンが来て最初のフレーム </summary>
+    bool _IsInitMyTurn = true;
+
     [SerializeField, Tooltip("最上位コマンドカードメニューで選択中のもの")]
     FirstMenu _FirstMenu = FirstMenu.Solo;
 
@@ -124,6 +127,8 @@ public class BattleOperatorForPlayer : BattleOperator
         base.Start();
         _Evaluation = FindObjectOfType<GUIEvaluation>();
 
+        _IsInitMyTurn = true;
+
         #region 各コマンドを初期化＆Runメソッドの紐づけ(ただし、先頭 index = 0 は Backコマンド用にnullを指定)
 
         /* ソロアタック */
@@ -150,6 +155,15 @@ public class BattleOperatorForPlayer : BattleOperator
         //コマンドを確定して実行中でない
         if (_RunningCommand == null)
         {
+            //自分のターンが初めて訪れた場合に実行
+            if(_IsInitMyTurn)
+            {
+                //決定入力ナビ
+                GUIPlayersInputNavigation.CorrectOrder(_Status.Number, true);
+                GUIPlayersInputNavigation.CursorHorizontalOrder(_Status.Number, true);
+                _IsInitMyTurn = false;
+            }
+
             //FirstMenuを選択中
             if (_SecondMenu == null)
             {
@@ -163,6 +177,10 @@ public class BattleOperatorForPlayer : BattleOperator
                 if (InputAssistant.GetDownJump(_Status.Number))
                 {
                     _SecondMenuIndex = 0;
+
+                    //ナビゲーション起動
+                    GUIPlayersInputNavigation.CursorVerticalOrder(_Status.Number, true);
+                    GUIPlayersInputNavigation.BackOrder(_Status.Number, true);
 
                     switch (_FirstMenu)
                     {
@@ -203,6 +221,10 @@ public class BattleOperatorForPlayer : BattleOperator
                     {
                         _Candidate = null;
                         _SecondMenu = null;
+
+                        //ナビゲーション状態を１つ前に戻す
+                        GUIPlayersInputNavigation.CursorHorizontalOrder(_Status.Number, true);
+                        GUIPlayersInputNavigation.BackOrder();
                     }
                     else
                     {
@@ -213,6 +235,16 @@ public class BattleOperatorForPlayer : BattleOperator
                             _Candidate = null;
                         }
                     }
+                }
+                //バック(キャンセル)処理
+                if (InputAssistant.GetDownAttack(_Status.Number))
+                {
+                    _Candidate = null;
+                    _SecondMenu = null;
+
+                    //ナビゲーション状態を１つ前に戻す
+                    GUIPlayersInputNavigation.CursorHorizontalOrder(_Status.Number, true);
+                    GUIPlayersInputNavigation.BackOrder();
                 }
             }
             //コマンド実行相手を選択中
@@ -248,6 +280,11 @@ public class BattleOperatorForPlayer : BattleOperator
                     //ターゲットを決めて、コマンドを実行
                     else
                     {
+                        //各種入力ナビ解除
+                        GUIPlayersInputNavigation.CorrectOrder();
+                        GUIPlayersInputNavigation.CursorVerticalOrder();
+                        GUIPlayersInputNavigation.BackOrder();
+
                         //SP消費 or アイテム数マイナス
                         if (_FirstMenu == FirstMenu.Item) _Candidate.Value -= 1;
                         else _Status.SPCurrent -= _Candidate.Value;
@@ -272,7 +309,15 @@ public class BattleOperatorForPlayer : BattleOperator
                                 break;
                             default: break;
                         }
+
+                        //自ターンの行動選択終了・自ターンに備える
+                        _IsInitMyTurn = true;
                     }
+                }
+                //バック(キャンセル)処理
+                if (InputAssistant.GetDownAttack(_Status.Number))
+                {
+                    _Candidate = null;
                 }
             }
         }
@@ -365,6 +410,9 @@ public class BattleOperatorForPlayer : BattleOperator
     {
         //対象を1体に絞る
         BattleOperator target = targets[0];
+
+        //ジャンプ入力ナビ
+        GUIPlayersInputNavigation.JumpOrder(_Status.Number, true, true);
 
         //攻撃前に少しのインターバル
         yield return new WaitForSeconds(0.5f);
@@ -462,6 +510,9 @@ public class BattleOperatorForPlayer : BattleOperator
 
         yield return sequence.WaitForCompletion();
         yield return new WaitForSeconds(0.5f);
+
+        //ジャンプ入力ナビ解除
+        GUIPlayersInputNavigation.JumpOrder();
 
         _Status.IsMyTurn = false;
     }

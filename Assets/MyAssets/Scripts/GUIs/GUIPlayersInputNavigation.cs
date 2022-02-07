@@ -440,5 +440,52 @@ public class GUIPlayersInputNavigation : Singleton<GUIPlayersInputNavigation>
                 break;
         }
     }
+
+    /// <summary> バック(キャンセル)入力ナビゲートを促す </summary>
+    /// <param name="playerNumber">プレイヤー番号 0:両方 1:1P向け 2:2P向け</param>
+    /// <param name="isForActivate">true : 起動するために false : 消すために</param>
+    /// <param name="isDoAccent"> true : 強調表示する </param>
+    public static void BackOrder(int playerNumber = 0, bool isForActivate = false, bool isDoAccent = false)
+    {
+        switch (playerNumber)
+        {
+            case 0:
+                I._AttackOrderAnim1.gameObject.SetActive(isForActivate);
+                I._AttackOrderAnim2.gameObject.SetActive(isForActivate);
+                if (isForActivate)
+                {
+                    I._AttackOrderAnim1.Play(I._BackOrderAnimName);
+                    I._AttackOrderAnim2.Play(I._BackOrderAnimName);
+                    if (isDoAccent)
+                    {
+                        I._AttackOrderAnim1.Play(I._DoAccentAnimName, -1, 0f);
+                        I._AttackOrderAnim2.Play(I._DoAccentAnimName, -1, 0f);
+                    }
+                }
+                break;
+            case 1:
+                I._AttackOrderAnim1.gameObject.SetActive(isForActivate);
+                if (isForActivate)
+                {
+                    I._AttackOrderAnim1.Play(I._BackOrderAnimName);
+                    if (isDoAccent)
+                    {
+                        I._AttackOrderAnim1.Play(I._DoAccentAnimName, -1, 0f);
+                    }
+                }
+                break;
+            case 2:
+                I._AttackOrderAnim2.gameObject.SetActive(isForActivate);
+                if (isForActivate)
+                {
+                    I._AttackOrderAnim2.Play(I._BackOrderAnimName);
+                    if (isDoAccent)
+                    {
+                        I._AttackOrderAnim2.Play(I._DoAccentAnimName, -1, 0f);
+                    }
+                }
+                break;
+        }
+    }
     #endregion
 }

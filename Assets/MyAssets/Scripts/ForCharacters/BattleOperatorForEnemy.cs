@@ -50,10 +50,10 @@ public abstract class BattleOperatorForEnemy : BattleOperator
             BattleOperatorForPlayer player = other.GetComponent<BattleOperatorForPlayer>();
 
             //ì™è„Ç©ÇÁê⁄êGÇ»ÇÁì•Ç›Ç¬ÇØÇÁÇÍÇΩîªíË
-            if ((hitpos - _Status.HeadPoint).y > 0)
+            if ((hitpos - _Status.HeadPoint / 1.5f).y > 0)
             {
                 _IsCounterattacked = true;
-                GaveDamage(player.AttackStatus, 0.2f);
+                GaveDamage(player.AttackStatus, 0.5f);
                 player.DoTrample(0.75f);
             }
             //ì•Ç‹ÇÍÇ∏Ç…ê⁄êG

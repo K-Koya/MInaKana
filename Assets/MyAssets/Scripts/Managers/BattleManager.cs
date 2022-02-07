@@ -97,8 +97,8 @@ public class BattleManager : MonoBehaviour
 
         if (!_TurnOwner || !_TurnOwner.IsMyTurn)
         {
-            CheckSettlementToResult();
             TurnInstructer();
+            CheckSettlementToResult();
         }
     }
 
@@ -160,14 +160,22 @@ public class BattleManager : MonoBehaviour
         //プレイヤーが一人も残っていない場合ゲームオーバー
         if (ActiveCharacters.OfType<PlayerStatus>().ToList().Count < 1)
         {
+            _TurnOwner = null;
+            GUIPlayersInputNavigation.CorrectOrder();
+            GUIPlayersInputNavigation.CursorMultiOrder();
+            GUIPlayersInputNavigation.BackOrder();
             _Situation = BattleSituation.PlayerLose;
-            _PD.Play(_CutForWin);
+            _PD.Play(_CutForLose);
         }
         //プレイヤーが残っていて敵が一体も残っていない場合勝利
         else if (ActiveCharacters.OfType<EnemyStatus>().ToList().Count < 1)
         {
+            _TurnOwner = null;
+            GUIPlayersInputNavigation.CorrectOrder();
+            GUIPlayersInputNavigation.CursorMultiOrder();
+            GUIPlayersInputNavigation.BackOrder();
             _Situation = BattleSituation.PlayerWin;
-            _PD.Play(_CutForLose);
+            _PD.Play(_CutForWin);
         }
     }
 }
