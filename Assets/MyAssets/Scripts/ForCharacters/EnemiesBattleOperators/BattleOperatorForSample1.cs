@@ -39,6 +39,9 @@ public class BattleOperatorForSample1 : BattleOperatorForEnemy
     /// <param name="target"> 一人の標的 </param>
     IEnumerator BodyAttack(BattleOperator target)
     {
+        //ジャンプ回避表示
+        GUIPlayersInputNavigation.JumpOrder(0, true, true);
+
         _IsAttacking = true;
         float waitTime = 0.5f;//Random.Range(0.1f, 1f);
         bool isGaveCounter = false;
@@ -75,6 +78,9 @@ public class BattleOperatorForSample1 : BattleOperatorForEnemy
 
         yield return sequence.WaitForCompletion();
         yield return new WaitForSeconds(0.5f);
+
+        //ジャンプ回避非表示
+        GUIPlayersInputNavigation.JumpOrder();
 
         _IsAttacking = false;
         _Status.IsMyTurn = false;
