@@ -9,6 +9,12 @@ using UnityEngine;
 public abstract class BattleOperator : MonoBehaviour
 {
     #region メンバー
+    [SerializeField, Tooltip("行動対象を指す矢印オブジェクト")]
+    GameObject _TargetArrow = default;
+
+    /// <summary> true : 行動対象にされている </summary>
+    bool _IsTargeted = false;
+
     /// <summary> 戦闘時の初期位置 </summary>
     protected Vector3 _BasePosition = default;
 
@@ -30,6 +36,8 @@ public abstract class BattleOperator : MonoBehaviour
 
 
     #region プロパティ
+    /// <summary> true : 行動対象にされている (主に行動対象選択の時に矢印を表示させるために利用) </summary>
+    public bool IsTargeted { set => _IsTargeted = value; }
     /// <summary> キャラクター名 </summary>
     public string Name { get => _Status.Name; }
     /// <summary> 戦闘時の初期位置 </summary>
@@ -72,6 +80,9 @@ public abstract class BattleOperator : MonoBehaviour
         //ダメージ表示処理メソッドを委譲
         GUIVisualizeChangeLife _VisualizeChangeLife = GetComponentInChildren<GUIVisualizeChangeLife>();
         VisualizeDamage = _VisualizeChangeLife.Damage;
+
+        //ターゲット矢印を非表示
+        _TargetArrow.SetActive(false);
     }
 
     // Update is called once per frame
@@ -86,6 +97,9 @@ public abstract class BattleOperator : MonoBehaviour
             _RunningCommand = null;
             OperateCounter();
         }
+
+        //ターゲット矢印の表示処理
+        _TargetArrow.SetActive(_IsTargeted);
     }
 
     /// <summary>

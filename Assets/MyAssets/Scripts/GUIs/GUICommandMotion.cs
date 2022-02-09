@@ -70,6 +70,9 @@ public class GUICommandMotion : MonoBehaviour
             Array.ForEach(_SecondMenuTexts, f => f.gameObject.SetActive(false));
             //説明文ウィンドウを非表示
             _MessageWindow.SetActive(false);
+            //ターゲット矢印を非表示に
+            Array.ForEach(_BattleOperator.Players, t => t.IsTargeted = false);
+            Array.ForEach(_BattleOperator.Enemies, t => t.IsTargeted = false);
             return;
         }
 
@@ -198,21 +201,32 @@ public class GUICommandMotion : MonoBehaviour
     {
         //ターゲットリストを取得
         int numberOfTarget = 0;
-        BattleOperator[] target = default;
+        BattleOperator[] targets = default;
         switch (_BattleOperator.Candidate.Target)
         {
             case TargetType.OneEnemy:
             case TargetType.OneByOneEnemies:
-                target = _BattleOperator.ActiveEnemies;
-                numberOfTarget = target.Length + 1;
+                targets = _BattleOperator.ActiveEnemies;
+                numberOfTarget = targets.Length + 1;
+
+                //ターゲット用矢印を表示
+                Array.ForEach(targets, t => t.IsTargeted = false);
+                if (_BattleOperator.TargetIndex > 0) targets[_BattleOperator.TargetIndex - 1].IsTargeted = true;
                 break;
             case TargetType.AllEnemies:
-                target = _BattleOperator.ActiveEnemies;
+                targets = _BattleOperator.ActiveEnemies;
                 numberOfTarget = 2;
+
+                //ターゲット用矢印を表示
+                Array.ForEach(targets, t => t.IsTargeted = true);
                 break;
             case TargetType.Allies:
-                target = _BattleOperator.Players;
-                numberOfTarget = target.Length + 1;
+                targets = _BattleOperator.Players;
+                numberOfTarget = targets.Length + 1;
+
+                //ターゲット用矢印を表示
+                Array.ForEach(targets, t => t.IsTargeted = false);
+                if (_BattleOperator.TargetIndex > 0) targets[_BattleOperator.TargetIndex - 1].IsTargeted = true;
                 break;
             default: break;
         }
@@ -229,7 +243,13 @@ public class GUICommandMotion : MonoBehaviour
             }
             else
             {
-                if (index > 0) _SecondMenuTexts[i].Show(target[index - 1].Name, "");
+                //戻るコマンド以外
+                if (index > 0)
+                {
+                    //対象が個人か全体かで表示を分岐
+                    if (_BattleOperator.Candidate.Target == TargetType.AllEnemies)_SecondMenuTexts[i].Show("全体", "");
+                    else _SecondMenuTexts[i].Show(targets[index - 1].Name, "");
+                }
                 //戻るコマンド
                 else _SecondMenuTexts[i].Show("Back", "");
             }
