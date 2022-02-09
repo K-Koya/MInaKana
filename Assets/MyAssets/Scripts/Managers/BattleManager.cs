@@ -161,9 +161,7 @@ public class BattleManager : MonoBehaviour
         if (ActiveCharacters.OfType<PlayerStatus>().ToList().Count < 1)
         {
             _TurnOwner = null;
-            GUIPlayersInputNavigation.CorrectOrder();
-            GUIPlayersInputNavigation.CursorMultiOrder();
-            GUIPlayersInputNavigation.BackOrder();
+            GUIPlayersInputNavigation.OrderReset();
             _Situation = BattleSituation.PlayerLose;
             _PD.Play(_CutForLose);
         }
@@ -171,9 +169,7 @@ public class BattleManager : MonoBehaviour
         else if (ActiveCharacters.OfType<EnemyStatus>().ToList().Count < 1)
         {
             _TurnOwner = null;
-            GUIPlayersInputNavigation.CorrectOrder();
-            GUIPlayersInputNavigation.CursorMultiOrder();
-            GUIPlayersInputNavigation.BackOrder();
+            GUIPlayersInputNavigation.OrderReset();
             _Situation = BattleSituation.PlayerWin;
             _PD.Play(_CutForWin);
         }

@@ -1,8 +1,7 @@
 using System;
 using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 
 /// <summary>
@@ -28,6 +27,12 @@ public class GUICommandMotion : MonoBehaviour
     [SerializeField, Tooltip("二番目に出てくるコマンドリストメニューで、\n文字を表示させるコンポーネント群をアサインする")]
     GUIShowCommandName[] _SecondMenuTexts = default;
 
+    [SerializeField, Tooltip("説明文を表示させるためのウィンドウ")]
+    GameObject _MessageWindow = default;
+
+    [SerializeField, Tooltip("説明文を表示させるためのテキスト")]
+    Text _MessageText = default;
+
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +47,10 @@ public class GUICommandMotion : MonoBehaviour
         Array.ForEach(_FirstMenuTransforms, f => f.gameObject.SetActive(false));
         //コマンドリストを非アクティブ化
         Array.ForEach(_SecondMenuTexts, f => f.gameObject.SetActive(false));
+
+        //説明文ウィンドウを初期化
+        _MessageWindow.SetActive(false);
+        _MessageText.text = "一人で攻撃";
     }
 
     // Update is called once per frame
@@ -59,6 +68,8 @@ public class GUICommandMotion : MonoBehaviour
             Array.ForEach(_FirstMenuTransforms, f => f.gameObject.SetActive(false));
             //コマンドリストを非アクティブ化
             Array.ForEach(_SecondMenuTexts, f => f.gameObject.SetActive(false));
+            //説明文ウィンドウを非表示
+            _MessageWindow.SetActive(false);
             return;
         }
 
@@ -69,11 +80,24 @@ public class GUICommandMotion : MonoBehaviour
             //コマンドリストを非アクティブ化
             Array.ForEach(_SecondMenuTexts, f => f.gameObject.SetActive(false));
 
+            //説明文ウィンドウを表示
+            _MessageWindow.SetActive(true);
+
             //コマンドが変更されていれば、カードを移動させる
             if ((int)_BattleOperator.FirstMenu != _SelectedBeforeFrame)
             {
                 CardMove();
                 _SelectedBeforeFrame = (int)_BattleOperator.FirstMenu;
+
+                //コマンドカードごとに説明文を指定
+                switch (_BattleOperator.FirstMenu)
+                {
+                    case FirstMenu.Solo:    _MessageText.text = "一人で攻撃"; break;
+                    case FirstMenu.Twins:   _MessageText.text = "二人で攻撃"; break;
+                    case FirstMenu.Item:    _MessageText.text = "アイテムを使う"; break;
+                    case FirstMenu.Leave:   _MessageText.text = "戦闘から逃走"; break;
+                    case FirstMenu.Pass:    _MessageText.text = "何もせずターンを過ごす"; break;
+                }
             }
         }
         else
@@ -92,6 +116,9 @@ public class GUICommandMotion : MonoBehaviour
                     CommandListViewer();
                     _SelectedBeforeFrame = _BattleOperator.SecondMenuIndex + 100;
                 }
+
+                //説明文ウィンドウを表示
+                _MessageWindow.SetActive(true);
             }
             //コマンドを決定して、ターゲットを選択中
             else
@@ -102,6 +129,9 @@ public class GUICommandMotion : MonoBehaviour
                     TargetListViewer();
                     _SelectedBeforeFrame = _BattleOperator.TargetIndex + 1000;
                 }
+
+                //説明文ウィンドウを非表示
+                _MessageWindow.SetActive(false);
             }
         }
 
@@ -149,9 +179,16 @@ public class GUICommandMotion : MonoBehaviour
                     if (_BattleOperator.FirstMenu == FirstMenu.Item) unit = " ×";
                     CommandBase cb = _BattleOperator.SecondMenu[index];
                     _SecondMenuTexts[i].Show(cb.Name, unit + cb.Value);
+
+                    //説明文表示
+                    if (index == _BattleOperator.SecondMenuIndex) _MessageText.text = cb.Explain;
                 }
                 //戻るコマンド
-                else _SecondMenuTexts[i].Show("Back", "");
+                else
+                {
+                    _SecondMenuTexts[i].Show("Back", "");
+                    _MessageText.text = "コマンドカード選択に戻る";
+                }
             }
         }
     }

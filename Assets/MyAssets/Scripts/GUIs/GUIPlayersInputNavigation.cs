@@ -81,14 +81,7 @@ public class GUIPlayersInputNavigation : Singleton<GUIPlayersInputNavigation>
     // Start is called before the first frame update
     void Start()
     {
-        _MoveOrderAnim1.Play(I._NonMoveOrderAnimName);
-        _MoveOrderAnim2.Play(I._NonMoveOrderAnimName);
-        _JumpOrderAnim1.gameObject.SetActive(false);
-        _JumpOrderAnim2.gameObject.SetActive(false);
-        _JumpOrderAnimTrigger1.gameObject.SetActive(false);
-        _JumpOrderAnimTrigger2.gameObject.SetActive(false);
-        _AttackOrderAnim1.gameObject.SetActive(false);
-        _AttackOrderAnim2.gameObject.SetActive(false);
+        OrderReset();
     }
 
     // Update is called once per frame
@@ -484,6 +477,37 @@ public class GUIPlayersInputNavigation : Singleton<GUIPlayersInputNavigation>
                         I._AttackOrderAnim2.Play(I._DoAccentAnimName, -1, 0f);
                     }
                 }
+                break;
+        }
+    }
+
+    /// <summary> 全ての入力ナビゲートを取り消す </summary>
+    /// <param name="playerNumber">プレイヤー番号 0:両方 1:1P向け 2:2P向け</param>
+    public static void OrderReset(int playerNumber = 0)
+    {
+        switch (playerNumber)
+        {
+            case 0:
+                I._MoveOrderAnim1.Play(I._NonMoveOrderAnimName);
+                I._MoveOrderAnim2.Play(I._NonMoveOrderAnimName);
+                I._JumpOrderAnim1.gameObject.SetActive(false);
+                I._JumpOrderAnim2.gameObject.SetActive(false);
+                I._JumpOrderAnimTrigger1.gameObject.SetActive(false);
+                I._JumpOrderAnimTrigger2.gameObject.SetActive(false);
+                I._AttackOrderAnim1.gameObject.SetActive(false);
+                I._AttackOrderAnim2.gameObject.SetActive(false);
+                break;
+            case 1:
+                I._MoveOrderAnim1.Play(I._NonMoveOrderAnimName);
+                I._JumpOrderAnim1.gameObject.SetActive(false);
+                I._JumpOrderAnimTrigger1.gameObject.SetActive(false);
+                I._AttackOrderAnim1.gameObject.SetActive(false);
+                break;
+            case 2:
+                I._MoveOrderAnim2.Play(I._NonMoveOrderAnimName);
+                I._JumpOrderAnim2.gameObject.SetActive(false);
+                I._JumpOrderAnimTrigger2.gameObject.SetActive(false);
+                I._AttackOrderAnim2.gameObject.SetActive(false);
                 break;
         }
     }

@@ -583,7 +583,7 @@ public class Command_Attack_Jump : CommandBase
         _Name = "ジャンプ";
         _TargetType = TargetType.OneEnemy;
         _ConsumeValue = 0;
-        _Explain = "選択した敵１体の頭上にジャンプして踏みつけ！　踏みつける瞬間にボタンを押すとダメージアップ！　最高２回踏みつけるぞ！";
+        _Explain = "選択した敵１体の頭上にジャンプして踏みつけ！\n踏みつける瞬間にボタンを押すとダメージアップ！\n最高２回踏みつけるぞ！";
         _IsAcquired = true;
         _IsUsable = true;
         Run = run;
