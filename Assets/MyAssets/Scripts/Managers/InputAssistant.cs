@@ -127,12 +127,23 @@ public class InputAssistant : Singleton<InputAssistant>
     /// <param name="playerNumber">キャラクター番号(1or2)</param>
     /// <returns>true : 押下された直後</returns>
     static public bool GetDownRight(int playerNumber) { return _SelectRight[playerNumber - 1].triggered; }
+
+    /// <summary> ジャンプボタン押下中 </summary>
+    /// <param name="playerNumber">キャラクター番号(1or2)</param>
+    /// <returns>true : 押下中</returns>
+    static public bool GetJump(int playerNumber) { return _JumpAction[playerNumber - 1].IsPressed(); }
     #endregion
+
+    protected override void Awake()
+    {
+        IsDontDestroyOnLoad = true;
+        base.Awake();
+    }
 
     void Start()
     {
         //ボタン入力を関連付け
-        PlayerInput input = GetComponent<PlayerInput>();
+        PlayerInput input = FindObjectOfType<PlayerInput>();
         InputActionMap actionMap = input.currentActionMap;
         _MenuAction = actionMap[_ButtonNameMenu];
         _JumpAction[0] = actionMap[_ButtonName1PJump];

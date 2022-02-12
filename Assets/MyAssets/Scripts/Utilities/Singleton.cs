@@ -6,15 +6,16 @@ using UnityEngine;
 /// <typeparam name="T">MonoBehaviourを継承する（Inspector上に出したい）コンポーネント</typeparam>
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
-    /// <summary>
-    /// ture : DontDestroyOnLoadの対象にする
-    /// </summary>
-    private bool _isDontDestroyOnLoad = false;
+    [Header("シングルトンオブジェクトである")]
+    [SerializeField, Tooltip("ture : DontDestroyOnLoadの対象にする")]
+    bool _isDontDestroyOnLoad = false;
+
+    [Space]
 
     /// <summary>
     /// Inspector上に出ているシングルトンのコンポーネントインスタンス
     /// </summary>
-    private static T _I = default;
+    static T _I = default;
 
 
     /* プロパティ */
@@ -48,7 +49,10 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
         //登録されているシングルトンコンポーネントが自分のインスタンスと同じなら、DontDestroyOnLoadに登録する
         //異なれば、自分を破棄する
-        if (_I && this != _I)  Destroy(this.gameObject);
-        else DontDestroyOnLoad(this.gameObject);
+        if (_I && this != I) Destroy(this.gameObject);
+        else
+        {
+            DontDestroyOnLoad(this.gameObject);
+        }
     }
 }

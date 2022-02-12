@@ -29,7 +29,7 @@ public class BattleOperatorForSample1 : BattleOperatorForEnemy
             {
                 case TargetSelectRule.AtRandom:
                     //‚Ç‚¿‚ç‚©‚ğƒ‰ƒ“ƒ_ƒ€‚ÅUŒ‚
-                    _RunningCommand = StartCoroutine(BodyAttack(ActivePlayers[Random.Range(0, 1)]));
+                    _RunningCommand = StartCoroutine(BodyAttack(ActivePlayers[Random.Range(0, ActivePlayers.Length)]));
                     break;
             }
         }

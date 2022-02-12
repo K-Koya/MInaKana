@@ -426,13 +426,13 @@ public class BattleOperatorForPlayer : BattleOperator
         //助走して敵頭上にジャンプTween開始
         Sequence sequence = DOTween.Sequence();
         sequence.Append(transform.DOMove(jumpPoint, 0.5f).SetEase(Ease.Linear));
-        sequence.Append(transform.DOJump(target.HeadPoint, 5.0f, 1, 1.0f).SetEase(Ease.Linear));
+        sequence.Append(transform.DOJump(target.HeadPoint, 5.0f, 1, 0.7f).SetEase(Ease.Linear));
         sequence.Play().OnUpdate(() => 
         {
             //入力状態が初期値でボタン入力があれば、タイミングの良し悪しを判定し入力状態に反映
             if (InputAssistant.GetDownJump(_Status.Number) && _InputResult == InputEvaluation.Initial) _InputResult = _NowEvaluation;
         });
-        yield return StartCoroutine(InputEvaluater(1.5f, 0f, 0f, 0.1f, 0.2f));
+        yield return StartCoroutine(InputEvaluater(1.2f, 0f, 0f, 0.1f, 0.2f));
 
         //判定表示
         _Evaluation.DoAnimation(_InputResult, target.HeadPoint);

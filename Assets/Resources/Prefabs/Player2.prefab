@@ -3745,7 +3745,7 @@ MonoBehaviour:
   _IsMyTurn: 0
   _OffsetHeadPoint: 1
   _IsDefeated: 0
-  _JumpPower: 30
+  _JumpPower: 25
   _IsGrounded: 0
   _SPInitial: 100
   _SPCurrent: 100

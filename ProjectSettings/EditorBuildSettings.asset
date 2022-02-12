@@ -4,6 +4,12 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Title.unity
+    guid: 1d7b47ec8cb8e89489733614b0e71589
+  - enabled: 1
+    path: Assets/Scenes/GrassField.unity
+    guid: 745a5aef1db3cdd4c83f24d9978c447f
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 790ba219956f27e4488b0309f3809576, type: 2}

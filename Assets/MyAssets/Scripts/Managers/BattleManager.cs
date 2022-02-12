@@ -77,6 +77,8 @@ public class BattleManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _Situation = BattleSituation.Introduction;
+
         _PD = FindObjectOfType<PlayableDirector>();
         //戦闘に参加中のキャラクター全員のステータスを取得
         _BattleCharacters = FindObjectsOfType<CharacterStatus>().ToList();
@@ -92,13 +94,28 @@ public class BattleManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //戦闘中のみ実行
-        if (_Situation != BattleSituation.OnBattle) return;
-
-        if (!_TurnOwner || !_TurnOwner.IsMyTurn)
+        switch (_Situation)
         {
-            TurnInstructer();
-            CheckSettlementToResult();
+            case BattleSituation.OnBattle:
+                if (!_TurnOwner || !_TurnOwner.IsMyTurn)
+                {
+                    TurnInstructer();
+                    CheckSettlementToResult();
+                }
+                break;
+            case BattleSituation.PlayerWin:
+                if (InputAssistant.GetDownMenu)
+                {
+                    MySceneManager.I.SceneChange(MySceneManager.I.SceneNameTitle, 1f, LoadSceneEffectType.CircleBlack);
+                }
+                break;
+            case BattleSituation.PlayerLose:
+                if (InputAssistant.GetDownMenu)
+                {
+                    MySceneManager.I.SceneChange(MySceneManager.I.SceneNameTitle, 1f, LoadSceneEffectType.CircleBlack);
+                }
+                break;
+            default: break;
         }
     }
 
@@ -122,9 +139,20 @@ public class BattleManager : MonoBehaviour
     {
         if (_PD != pd) return;
 
-        Array.ForEach(onEndDisableObjects, o => o.SetActive(false));
-        Array.ForEach(onEndEnableObjects, o => o.SetActive(true));
-        if (_Situation == BattleSituation.Introduction) _Situation = BattleSituation.OnBattle;
+        //バトル導入時なら、オブジェクトの有効化をする
+        switch (_Situation)
+        {
+            case BattleSituation.Introduction:
+                Array.ForEach(onEndDisableObjects, o => o.SetActive(false));
+                Array.ForEach(onEndEnableObjects, o => o.SetActive(true));
+                _Situation = BattleSituation.OnBattle;
+                break;
+            case BattleSituation.PlayerWin:
+            case BattleSituation.PlayerLose:
+
+                break;
+            default: break;
+        }
     }
 
     /// <summary>
@@ -160,18 +188,28 @@ public class BattleManager : MonoBehaviour
         //プレイヤーが一人も残っていない場合ゲームオーバー
         if (ActiveCharacters.OfType<PlayerStatus>().ToList().Count < 1)
         {
-            _TurnOwner = null;
-            GUIPlayersInputNavigation.OrderReset();
+            if (_TurnOwner)
+            {
+                _TurnOwner.IsMyTurn = false;
+                _TurnOwner = null;
+            }
+            
             _Situation = BattleSituation.PlayerLose;
             _PD.Play(_CutForLose);
+            GUIPlayersInputNavigation.OrderReset();
         }
         //プレイヤーが残っていて敵が一体も残っていない場合勝利
         else if (ActiveCharacters.OfType<EnemyStatus>().ToList().Count < 1)
         {
-            _TurnOwner = null;
-            GUIPlayersInputNavigation.OrderReset();
+            if (_TurnOwner)
+            {
+                _TurnOwner.IsMyTurn = false;
+                _TurnOwner = null;
+            }
+
             _Situation = BattleSituation.PlayerWin;
             _PD.Play(_CutForWin);
+            GUIPlayersInputNavigation.OrderReset();
         }
     }
 }
