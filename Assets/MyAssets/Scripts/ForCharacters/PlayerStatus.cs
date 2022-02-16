@@ -24,7 +24,7 @@ public class PlayerStatus : CharacterStatus , ICSVDataConverter
     float _JumpPower = 15.0f;
 
     [SerializeField, Tooltip("true : 地面についている")]
-    protected bool _IsGrounded = false;
+    bool _IsGrounded = false;
 
     [SerializeField, Tooltip("最大SP(スペシャルアタックの消費ポイント)")]
     short _SPInitial = 100;
@@ -39,7 +39,9 @@ public class PlayerStatus : CharacterStatus , ICSVDataConverter
     public override short SPCurrent { get => _SPCurrent; set => _SPCurrent = value; }
     /// <summary> 二人のプレイヤー情報を静的保管 </summary>
     public static List<PlayerStatus> Players { get => _players; }
-    
+    /// <summary> true : 地面についている </summary>
+    public bool IsGrounded { get => _IsGrounded; }
+
     #endregion
 
 
@@ -60,15 +62,6 @@ public class PlayerStatus : CharacterStatus , ICSVDataConverter
 
     void Update()
     {
-        if (_IsMyTurn && _IsGrounded)
-        {
-            _RB.isKinematic = true;
-        }
-        else
-        {
-            _RB.isKinematic = false;
-        }
-
         //重力落下
         if (!_RB.isKinematic)
         {
@@ -133,7 +126,11 @@ public class PlayerStatus : CharacterStatus , ICSVDataConverter
     /// <param name="collision"></param>
     private void OnCollisionExit(Collision collision)
     {
-        _IsGrounded = false;
+        //地形レイヤとの接触
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            _IsGrounded = false;
+        }
     }
 
     void ICSVDataConverter.CSVToMembers(List<string> csv)

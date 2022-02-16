@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,8 +7,8 @@ using UnityEngine;
 /// </summary>
 public class EnemyStatus : CharacterStatus
 {
-    /// <summary> このキャラクターをレンダリングするレンダラー </summary>
-    Renderer _Renderer = default;
+    [SerializeField, Tooltip("倒された時に発生するパーティクル")]
+    GameObject _DefeatEffect = default;
 
     void GetParameters()
     {
@@ -21,10 +21,10 @@ public class EnemyStatus : CharacterStatus
         //格納
         _HPInitial = short.Parse(data[2]);
         _HPCurrent = _HPInitial;
-        _Attack = short.Parse(data[3]);
-        _Defense = short.Parse(data[4]);
-        _Rapid = short.Parse(data[5]);
-        _Technique = short.Parse(data[6]);
+        _Attack = short.Parse(data[4]);
+        _Defense = short.Parse(data[5]);
+        _Rapid = short.Parse(data[6]);
+        _Technique = short.Parse(data[7]);
     }
 
     // Start is called before the first frame update
@@ -32,7 +32,6 @@ public class EnemyStatus : CharacterStatus
     {
         base.Start();
         GetParameters();
-        _Renderer = GetComponent<Renderer>();
     }
 
     // Update is called once per frame
@@ -46,6 +45,10 @@ public class EnemyStatus : CharacterStatus
     {
         base.DefeatProcess();
 
-        _Renderer.enabled = false;
+        GameObject go = Instantiate(_DefeatEffect);
+        go.transform.position = this.transform.position;
+        Destroy(go, 2f);
+
+        Array.ForEach(GetComponentsInChildren<Renderer>(), r => r.enabled = false);
     }
 }

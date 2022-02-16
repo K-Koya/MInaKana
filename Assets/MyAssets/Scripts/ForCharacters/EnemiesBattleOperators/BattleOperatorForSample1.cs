@@ -48,7 +48,7 @@ public class BattleOperatorForSample1 : BattleOperatorForEnemy
 
         //ターゲット正面に移動して一定時間待機
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(transform.DOMove(target.BasePosition + (target.transform.forward * 5f), 1f).SetEase(Ease.Linear));
+        sequence.Append(transform.DOMove(target.BasePosition + (target.transform.forward * 3f), 1f).SetEase(Ease.Linear));
         sequence.AppendInterval(waitTime);
         sequence.Play();
         yield return sequence.WaitForCompletion();

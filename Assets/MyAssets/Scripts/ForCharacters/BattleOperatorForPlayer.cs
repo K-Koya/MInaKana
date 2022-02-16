@@ -58,10 +58,25 @@ public enum TargetType : byte
 /// </summary>
 public class BattleOperatorForPlayer : BattleOperator
 {
+    #region Animator用
+    [SerializeField, Tooltip("アニメーション名 : 後退")]
+    protected string _AnimNameBackward = "OnBackward";
+
+    [SerializeField, Tooltip("アニメーション名 : ジャンプ")]
+    protected string _AnimNameJump = "OnJump";
+
+    [SerializeField, Tooltip("アニメーション名 : 踏みつけジャンプ")]
+    protected string _AnimNameStepJump = "OnStepJump";
+
+    [SerializeField, Tooltip("パラメーター名 : DOTweenを使っている")]
+    protected string _AnimNameUseTween = "OnUseTween";
+    #endregion
+
     #region メンバー変数
     /// <summary>true : 自分のターンが来て最初のフレーム </summary>
     bool _IsInitMyTurn = true;
 
+    [Header("派生クラスパラメーター")]
     [SerializeField, Tooltip("最上位コマンドカードメニューで選択中のもの")]
     FirstMenu _FirstMenu = FirstMenu.Solo;
 
@@ -101,6 +116,8 @@ public class BattleOperatorForPlayer : BattleOperator
     /// <summary> 今は行動せず先送りするコマンドのリスト </summary>
     List<CommandBase> _PassCommands = new List<CommandBase>();
 
+    /// <summary> キャラクターのRigidbody </summary>
+    Rigidbody _RB = default;
     #endregion
 
     #region プロパティ
@@ -129,6 +146,8 @@ public class BattleOperatorForPlayer : BattleOperator
 
         _IsInitMyTurn = true;
 
+        _RB = GetComponent<Rigidbody>();
+
         #region 各コマンドを初期化＆Runメソッドの紐づけ(ただし、先頭 index = 0 は Backコマンド用にnullを指定)
 
         /* ソロアタック */
@@ -147,6 +166,22 @@ public class BattleOperatorForPlayer : BattleOperator
         #endregion
     }
 
+    protected override void Update()
+    {
+        base.Update();
+
+        //接地フラグ設定
+        if(_RunningCommand == null)
+        {
+            _RB.isKinematic = false;
+        }
+        else
+        {
+            _RB.isKinematic = true;
+        }
+        _Motion.SetBool(_AnimParamGrounded, (_Status as PlayerStatus).IsGrounded);
+    }
+
     /// <summary>
     /// コマンド操作を受け付けてアクションを起こす
     /// </summary>
@@ -158,6 +193,9 @@ public class BattleOperatorForPlayer : BattleOperator
             //自分のターンが初めて訪れた場合に実行
             if(_IsInitMyTurn)
             {
+                //待機中モーション
+                _Motion.Play(_AnimNameStay);
+
                 //決定入力ナビ
                 GUIPlayersInputNavigation.CorrectOrder(_Status.Number, true);
                 GUIPlayersInputNavigation.CursorHorizontalOrder(_Status.Number, true);
@@ -339,6 +377,7 @@ public class BattleOperatorForPlayer : BattleOperator
         if (InputAssistant.GetDownJump(_Status.Number))
         {
             (_Status as PlayerStatus).DoJump(1f);
+            _Motion.Play(_AnimNameJump);
         }   
     }
 
@@ -348,6 +387,7 @@ public class BattleOperatorForPlayer : BattleOperator
     public void DoTrample(float powerRatio)
     {
         (_Status as PlayerStatus).DoJump(powerRatio, true);
+        _Motion.Play(_AnimNameStepJump);
     }
 
     /// <summary>
@@ -425,8 +465,8 @@ public class BattleOperatorForPlayer : BattleOperator
 
         //助走して敵頭上にジャンプTween開始
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(transform.DOMove(jumpPoint, 0.5f).SetEase(Ease.Linear));
-        sequence.Append(transform.DOJump(target.HeadPoint, 5.0f, 1, 0.7f).SetEase(Ease.Linear));
+        sequence.Append(transform.DOMove(jumpPoint, 0.5f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameRun)));
+        sequence.Append(transform.DOJump(target.HeadPoint, 3.0f, 1, 0.7f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameJump)));
         sequence.Play().OnUpdate(() => 
         {
             //入力状態が初期値でボタン入力があれば、タイミングの良し悪しを判定し入力状態に反映
@@ -446,7 +486,8 @@ public class BattleOperatorForPlayer : BattleOperator
             //入力状態初期化
             _InputResult = InputEvaluation.Initial;
             //2回目のジャンプで入力を再評価
-            sequence = transform.DOJump(target.HeadPoint, 3.0f, 1, 0.5f).SetEase(Ease.Linear).OnUpdate(() =>
+            sequence = transform.DOJump(target.HeadPoint, 2.0f, 1, 0.5f).SetEase(Ease.Linear).OnStart(() => 
+            _Motion.Play(_AnimNameStepJump)).OnUpdate(() =>
             {
                 if (InputAssistant.GetDownJump(_Status.Number) && _InputResult == InputEvaluation.Initial) _InputResult = _NowEvaluation;
             });
@@ -461,9 +502,9 @@ public class BattleOperatorForPlayer : BattleOperator
                 //ダメージ発生
                 target.GaveDamage(_Status.Attack, 1f);
 
-                sequence = DOTween.Sequence().Append(transform.DOJump(target.transform.position + (Vector3.forward * 5f), 2.0f, 1, 0.5f).SetEase(Ease.Linear));
+                sequence = DOTween.Sequence().Append(transform.DOJump(target.transform.position + (Vector3.forward * 5f), 2.0f, 1, 0.5f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameJump)));
                 sequence.Append(transform.DOMove(_BasePosition + Vector3.back * 3f, 0.05f).SetEase(Ease.INTERNAL_Zero));
-                sequence.Append(transform.DOMove(_BasePosition, 0.3f).SetEase(Ease.Linear));
+                sequence.Append(transform.DOMove(_BasePosition, 0.3f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameRun)));
                 sequence.Play();
             }
             //入力判定がGreat
@@ -472,8 +513,8 @@ public class BattleOperatorForPlayer : BattleOperator
                 //ダメージ発生
                 target.GaveDamage(_Status.Attack, 0.8f);
 
-                sequence = DOTween.Sequence().Append(transform.DOJump(jumpPoint, 2.0f, 1, 0.5f).SetEase(Ease.Linear));
-                sequence.Append(transform.DOMove(_BasePosition, 1f).SetEase(Ease.Linear));
+                sequence = DOTween.Sequence().Append(transform.DOJump(jumpPoint, 2.0f, 1, 0.5f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameJump)));
+                sequence.Append(transform.DOMove(_BasePosition, 1f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameBackward)));
                 sequence.Play();
             }
             //入力判定がMiss
@@ -482,8 +523,8 @@ public class BattleOperatorForPlayer : BattleOperator
                 //ダメージ発生
                 target.GaveDamage(_Status.Attack, 0.4f);
 
-                sequence = DOTween.Sequence().Append(transform.DOJump(jumpPoint, 1.5f, 1, 0.5f).SetEase(Ease.Linear));
-                sequence.Append(transform.DOMove(_BasePosition, 1f).SetEase(Ease.Linear));
+                sequence = DOTween.Sequence().Append(transform.DOJump(jumpPoint, 1.5f, 1, 0.5f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameJump)));
+                sequence.Append(transform.DOMove(_BasePosition, 1f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameBackward)));
                 sequence.Play();
             }
         }
@@ -493,8 +534,8 @@ public class BattleOperatorForPlayer : BattleOperator
             //ダメージ発生
             target.GaveDamage(_Status.Attack, 0.25f);
 
-            sequence = DOTween.Sequence().Append(transform.DOJump(jumpPoint, 1.5f, 1, 0.5f).SetEase(Ease.Linear));
-            sequence.Append(transform.DOMove(_BasePosition, 1f).SetEase(Ease.Linear));
+            sequence = DOTween.Sequence().Append(transform.DOJump(jumpPoint, 1.5f, 1, 0.5f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameJump)));
+            sequence.Append(transform.DOMove(_BasePosition, 1f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameBackward)));
             sequence.Play();
         }
         //入力判定がMiss
@@ -504,7 +545,7 @@ public class BattleOperatorForPlayer : BattleOperator
             target.GaveDamage(_Status.Attack, 0.1f);
 
             sequence = DOTween.Sequence().Append(transform.DOJump(jumpPoint, 1.0f, 2, 1.0f).SetEase(Ease.OutCubic));
-            sequence.Append(transform.DOMove(_BasePosition, 1f).SetEase(Ease.Linear));
+            sequence.Append(transform.DOMove(_BasePosition, 1f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameBackward)));
             sequence.Play();
         }
 
@@ -513,6 +554,9 @@ public class BattleOperatorForPlayer : BattleOperator
 
         //ジャンプ入力ナビ解除
         GUIPlayersInputNavigation.JumpOrder();
+
+        //待機状態に
+        _Motion.Play(_AnimNameStay);
 
         _Status.IsMyTurn = false;
     }

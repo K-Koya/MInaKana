@@ -34,6 +34,26 @@ public abstract class BattleOperator : MonoBehaviour
     protected Coroutine _RunningCommand = default;
     #endregion
 
+    #region Animator用
+    [Header("以下にAnimator中のアニメーションの名前を登録")]
+    [SerializeField, Tooltip("キャラクターのモーションを制御するアニメーター")]
+    protected Animator _Motion = default;
+
+    [SerializeField, Tooltip("パラメーター名 : やられ")]
+    protected string _AnimParamDefeated = "OnDefeat";
+
+    [SerializeField, Tooltip("パラメーター名 : 接地")]
+    protected string _AnimParamGrounded = "IsGrounded";
+
+    [SerializeField, Tooltip("アニメーション名 : 待機中")]
+    protected string _AnimNameStay = "OnStay";
+
+    [SerializeField, Tooltip("アニメーション名 : 走行")]
+    protected string _AnimNameRun = "OnRun";
+
+    [SerializeField, Tooltip("アニメーション名 : 被ダメージ")]
+    protected string _AnimNameDamage = "OnDamage";
+    #endregion
 
     #region プロパティ
     /// <summary> true : 行動対象にされている (主に行動対象選択の時に矢印を表示させるために利用) </summary>
@@ -83,6 +103,8 @@ public abstract class BattleOperator : MonoBehaviour
 
         //ターゲット矢印を非表示
         _TargetArrow.SetActive(false);
+
+        if (!_Motion) _Motion = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -91,6 +113,9 @@ public abstract class BattleOperator : MonoBehaviour
         if (_Status.IsMyTurn)
         {
             OperateCommand();
+
+            //反撃等でやられたらターン終了
+            if (_Status.IsDefeated) _Status.IsMyTurn = false;
         }
         else
         {
@@ -113,6 +138,12 @@ public abstract class BattleOperator : MonoBehaviour
         int damage = _Status.GaveDamage(attack, ratio);
         //ダメージ表示
         VisualizeDamage(damage, transform.position);
+
+        //ダメージリアクション
+        _Motion.Play(_AnimNameDamage);
+
+        //やられたらやられモーションを促す
+        if(_Status.IsDefeated) _Motion.SetTrigger(_AnimParamDefeated);
     }
     
 
