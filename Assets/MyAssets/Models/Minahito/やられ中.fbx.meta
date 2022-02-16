@@ -1,39 +1,12 @@
 fileFormatVersion: 2
-guid: 36770d2362719a44abc5b481e13f3978
+guid: deef874cd6edee24c9b1bbe648363299
 ModelImporter:
   serializedVersion: 22102
-  internalIDToNameTable: []
-  externalObjects:
+  internalIDToNameTable:
   - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: "\u30DE\u30C6\u30EA\u30A2\u30EB_000__MInahitoHair_png"
-    second: {fileID: 2100000, guid: 83dfc81efc3822340a1719bf3dba0d56, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: "\u30DE\u30C6\u30EA\u30A2\u30EB_001__\u30A2\u30A4\u30E9_\u9774_\u9774\u4E0B_png_001"
-    second: {fileID: 2100000, guid: a5af5d1a578c36b45adc8292a934ef73, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: "\u30DE\u30C6\u30EA\u30A2\u30EB_002__MinahitoTops_png"
-    second: {fileID: 2100000, guid: 7df5421c24fa9514fbd53a25760be62b, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: "\u30DE\u30C6\u30EA\u30A2\u30EB_003__MinahitoBottoms_png"
-    second: {fileID: 2100000, guid: cd935f56effa49d4586383a7fc6cf424, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: "\u30DE\u30C6\u30EA\u30A2\u30EB__MinahitoBody_png"
-    second: {fileID: 2100000, guid: b22f2bd8e9e81334eb51f356c41f3a6c, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: "\u30DF\u30CA\u30D2\u30C8_\u77B3__MinahitoEyes_png"
-    second: {fileID: 2100000, guid: 566bebee13eb29a428f780debc3d1761, type: 2}
+      74: -2788752948117833474
+    second: "M10_\u3084\u3089\u308C\u4E2D"
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -61,7 +34,36 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: "M10_\u3084\u3089\u308C\u4E2D"
+      takeName: "M10_\u3084\u3089\u308C\u4E2D"
+      internalID: 0
+      firstFrame: -1
+      lastFrame: 9
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:
     lODScreenPercentages: []
@@ -891,11 +893,11 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 36770d2362719a44abc5b481e13f3978, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 2
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   importBlendShapeDeformPercent: 1
   additionalBone: 0

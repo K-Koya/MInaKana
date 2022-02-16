@@ -1,39 +1,12 @@
 fileFormatVersion: 2
-guid: 36770d2362719a44abc5b481e13f3978
+guid: b75857f4f71cb9f43a08d24603e27500
 ModelImporter:
   serializedVersion: 22102
-  internalIDToNameTable: []
-  externalObjects:
+  internalIDToNameTable:
   - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: "\u30DE\u30C6\u30EA\u30A2\u30EB_000__MInahitoHair_png"
-    second: {fileID: 2100000, guid: 83dfc81efc3822340a1719bf3dba0d56, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: "\u30DE\u30C6\u30EA\u30A2\u30EB_001__\u30A2\u30A4\u30E9_\u9774_\u9774\u4E0B_png_001"
-    second: {fileID: 2100000, guid: a5af5d1a578c36b45adc8292a934ef73, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: "\u30DE\u30C6\u30EA\u30A2\u30EB_002__MinahitoTops_png"
-    second: {fileID: 2100000, guid: 7df5421c24fa9514fbd53a25760be62b, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: "\u30DE\u30C6\u30EA\u30A2\u30EB_003__MinahitoBottoms_png"
-    second: {fileID: 2100000, guid: cd935f56effa49d4586383a7fc6cf424, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: "\u30DE\u30C6\u30EA\u30A2\u30EB__MinahitoBody_png"
-    second: {fileID: 2100000, guid: b22f2bd8e9e81334eb51f356c41f3a6c, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: "\u30DF\u30CA\u30D2\u30C8_\u77B3__MinahitoEyes_png"
-    second: {fileID: 2100000, guid: 566bebee13eb29a428f780debc3d1761, type: 2}
+      74: -2343472066686216927
+    second: "A00_\u76F4\u7ACB\u6B63\u9762"
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -47,9 +20,44 @@ ModelImporter:
     removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
-    rigImportWarnings: 
+    rigImportWarnings: "Copied Avatar Rig Configuration mis-match. Bone length in
+      copied configuration does not match position in animation file:\n\t'Upper_Leg_L'
+      : position error = 13.638709 mm\n\t'Lower_Leg_L' : position error = 38.723061
+      mm\n\t'Foot_L' : position error = 44.085823 mm\n\t'Toes_L' : position error
+      = 13.201400 mm\n\t'Chest' : position error = 13.489259 mm\n\t'UpperChest' :
+      position error = 13.507984 mm\n\t'Shoulder_R' : position error = 10.140245
+      mm\n\t'Upper_Arm_R' : position error = 9.252790 mm\n\t'Lower_Arm_R' : position
+      error = 23.704348 mm\n\t'Hand_R' : position error = 22.276724 mm\n\t'Proximal__Thumb_R'
+      : position error = 2.893516 mm\n\t'Intermediate_Thumb_R' : position error =
+      4.751185 mm\n\t'Distal_Thumb_R' : position error = 2.535784 mm\n\t'Proximal_Ring_R'
+      : position error = 7.909910 mm\n\t'Intermediate_Ring_R' : position error =
+      3.430701 mm\n\t'Distal_Ring_R' : position error = 1.993485 mm\n\t'Proximal_Middle_R'
+      : position error = 7.783636 mm\n\t'Intermediate_Middle_R' : position error
+      = 3.700059 mm\n\t'Distal_Middle_R' : position error = 2.297742 mm\n\t'Proximal_Little_R'
+      : position error = 7.957906 mm\n\t'Intermediate_Little_R' : position error
+      = 3.136315 mm\n\t'Distal_Little_R' : position error = 1.821526 mm\n\t'Proximal_Index_R'
+      : position error = 7.839778 mm\n\t'Intermediate_Index_R' : position error =
+      3.320150 mm\n\t'Distal_Index_R' : position error = 2.058390 mm\n\t'Shoulder_L'
+      : position error = 10.140241 mm\n\t'Upper_Arm_L' : position error = 9.252820
+      mm\n\t'Lower_Arm_L' : position error = 23.704231 mm\n\t'Hand_L' : position
+      error = 22.276604 mm\n\t'Proximal__Thumb_L' : position error = 2.893581 mm\n\t'Intermediate_Thumb_L'
+      : position error = 4.751289 mm\n\t'Distal_Thumb_L' : position error = 2.535791
+      mm\n\t'Proximal_Ring_L' : position error = 7.909914 mm\n\t'Intermediate_Ring_L'
+      : position error = 3.430667 mm\n\t'Distal_Ring_L' : position error = 1.993415
+      mm\n\t'Proximal_Middle_L' : position error = 7.783641 mm\n\t'Intermediate_Middle_L'
+      : position error = 3.700229 mm\n\t'Distal_Middle_L' : position error = 2.297744
+      mm\n\t'Proximal_Little_L' : position error = 7.957919 mm\n\t'Intermediate_Little_L'
+      : position error = 3.136222 mm\n\t'Distal_Little_L' : position error = 1.821534
+      mm\n\t'Proximal_Index_L' : position error = 7.839670 mm\n\t'Intermediate_Index_L'
+      : position error = 3.320036 mm\n\t'Distal_Index_L' : position error = 2.058406
+      mm\n\t'Neck' : position error = 12.917640 mm\n\t'Head' : position error = 28.630617
+      mm\n\t'Eye_R' : position error = 14.225770 mm\n\t'Eye_L' : position error =
+      14.225769 mm\n"
     animationImportErrors: 
-    animationImportWarnings: 
+    animationImportWarnings: "\nClip 'A00_\u76F4\u7ACB\u6B63\u9762' has import animation
+      warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'Hip' is inbetween humanoid
+      transforms and has rotation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -61,7 +69,36 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: "A00_\u76F4\u7ACB\u6B63\u9762"
+      takeName: "A00_\u76F4\u7ACB\u6B63\u9762"
+      internalID: 0
+      firstFrame: -1
+      lastFrame: 119
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:
     lODScreenPercentages: []
@@ -891,11 +928,11 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 36770d2362719a44abc5b481e13f3978, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 2
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   importBlendShapeDeformPercent: 1
   additionalBone: 0

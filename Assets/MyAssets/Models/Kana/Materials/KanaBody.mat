@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: KanaBody
-  m_Shader: {fileID: 4800000, guid: 32243f7acb3d06441858b5ce68b6ff8c, type: 3}
+  m_Shader: {fileID: 4800000, guid: e806873cb8c3ba64da2bd317ba464fdc, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ShaderKeywords: 
