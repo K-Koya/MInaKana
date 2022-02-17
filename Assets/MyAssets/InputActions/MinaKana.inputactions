@@ -514,6 +514,17 @@
                 },
                 {
                     "name": "",
+                    "id": "ce738e21-7880-48cf-8642-06015a7baa8c",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "1PAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "86da4571-d7b3-458e-a2b2-2be56a971332",
                     "path": "<HID::Logicool Logicool Dual Action>/hat/right",
                     "interactions": "",
@@ -530,6 +541,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
+                    "action": "2PAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0f6226c0-0c3f-4435-b41a-67bf690deeec",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
                     "action": "2PAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
