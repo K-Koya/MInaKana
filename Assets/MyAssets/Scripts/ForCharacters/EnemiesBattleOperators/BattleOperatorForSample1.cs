@@ -48,16 +48,16 @@ public class BattleOperatorForSample1 : BattleOperatorForEnemy
 
         //ターゲット正面に移動して一定時間待機
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(transform.DOMove(target.BasePosition + (target.transform.forward * 3f), 1f).SetEase(Ease.Linear));
-        sequence.AppendInterval(waitTime);
+        sequence.Append(transform.DOMove(target.BasePosition + (target.transform.forward * 3f), 1f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameRun)));
+        sequence.AppendInterval(waitTime).OnStart(() => _Motion.Play(_AnimNameStay));
         sequence.Play();
         yield return sequence.WaitForCompletion();
 
         //体当たり攻撃
         _IsCounterattacked = false;
-        _AttackRatio = 0.4f;
+        _AttackRatio = 0.75f;
         sequence = DOTween.Sequence();
-        sequence.Append(transform.DOMove(target.BasePosition - (target.transform.forward * 5f), 0.8f).SetEase(Ease.Linear));
+        sequence.Append(transform.DOMove(target.BasePosition - (target.transform.forward * 5f), 0.8f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameRun)));
         sequence.Play().OnUpdate(() =>
         {
             //カウンターを受けたら、DOTweenを切る
@@ -70,13 +70,16 @@ public class BattleOperatorForSample1 : BattleOperatorForEnemy
         });
         yield return sequence.WaitForCompletion();
 
-        //カウンターを受けたか否かで対応した方法で原点再起
+        //ベース位置へ再起
         sequence = DOTween.Sequence();
         sequence.Append(transform.DOMove(_BasePosition - (transform.forward * 5f), 0.05f).SetEase(Ease.INTERNAL_Zero));
         sequence.Append(transform.DOMove(_BasePosition, 0.2f).SetEase(Ease.Linear));
         sequence.Play();
 
         yield return sequence.WaitForCompletion();
+
+        _Motion.Play(_AnimNameStay);
+
         yield return new WaitForSeconds(0.5f);
 
         //ジャンプ回避非表示

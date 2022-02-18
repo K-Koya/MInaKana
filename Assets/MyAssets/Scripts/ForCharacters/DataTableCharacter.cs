@@ -9,7 +9,7 @@ using UnityEngine;
 public class DataTableCharacter : Singleton<DataTableCharacter>, ICSVDataConverter
 {
     /// <summary> 利用するファイルのパス </summary>
-    const string FILE_PATH = "Assets/Resources/CSVFiles/Master/CharacterStatusMaster.csv";
+    const string FILE_PATH = "CSVFiles/Master/CharacterStatusMaster";
 
     /// <summary> データテーブルの列のキー文字列 </summary>
     List<string> _ColumnKeys = default;
@@ -30,7 +30,6 @@ public class DataTableCharacter : Singleton<DataTableCharacter>, ICSVDataConvert
 
     protected override void Awake()
     {
-        IsDontDestroyOnLoad = true;
         base.Awake();
 
         //データテーブルを作成

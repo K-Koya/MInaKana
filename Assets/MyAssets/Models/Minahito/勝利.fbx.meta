@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: ac2bd8f88f7402d4286cff9305778b0b
+guid: adfe64f42b95826469c6fd31fd2572ac
 ModelImporter:
   serializedVersion: 22102
   internalIDToNameTable:
   - first:
-      74: -6879746353247772340
-    second: "A05_\u901A\u5E38\u30B8\u30E3\u30F3\u30D7"
+      74: 5368753518922623435
+    second: "M40_\u52DD\u5229"
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -20,39 +20,7 @@ ModelImporter:
     removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
-    rigImportWarnings: "Copied Avatar Rig Configuration mis-match. Bone length in
-      copied configuration does not match position in animation file:\n\t'Upper_Leg_L'
-      : position error = 13.638717 mm\n\t'Lower_Leg_L' : position error = 38.723099
-      mm\n\t'Foot_L' : position error = 44.085823 mm\n\t'Toes_L' : position error
-      = 13.201400 mm\n\t'Chest' : position error = 13.489387 mm\n\t'UpperChest' :
-      position error = 13.507905 mm\n\t'Shoulder_R' : position error = 10.140212
-      mm\n\t'Upper_Arm_R' : position error = 9.252801 mm\n\t'Lower_Arm_R' : position
-      error = 23.704250 mm\n\t'Hand_R' : position error = 22.276724 mm\n\t'Proximal__Thumb_R'
-      : position error = 2.893551 mm\n\t'Intermediate_Thumb_R' : position error =
-      4.751166 mm\n\t'Distal_Thumb_R' : position error = 2.535791 mm\n\t'Proximal_Ring_R'
-      : position error = 7.909988 mm\n\t'Intermediate_Ring_R' : position error =
-      3.430743 mm\n\t'Distal_Ring_R' : position error = 1.993363 mm\n\t'Proximal_Middle_R'
-      : position error = 7.783699 mm\n\t'Intermediate_Middle_R' : position error
-      = 3.700120 mm\n\t'Distal_Middle_R' : position error = 2.297781 mm\n\t'Proximal_Little_R'
-      : position error = 7.957984 mm\n\t'Intermediate_Little_R' : position error
-      = 3.136246 mm\n\t'Distal_Little_R' : position error = 1.821452 mm\n\t'Proximal_Index_R'
-      : position error = 7.839827 mm\n\t'Intermediate_Index_R' : position error =
-      3.320066 mm\n\t'Distal_Index_R' : position error = 2.058336 mm\n\t'Shoulder_L'
-      : position error = 10.140245 mm\n\t'Upper_Arm_L' : position error = 9.252790
-      mm\n\t'Lower_Arm_L' : position error = 23.704132 mm\n\t'Hand_L' : position
-      error = 22.276724 mm\n\t'Proximal__Thumb_L' : position error = 2.893570 mm\n\t'Intermediate_Thumb_L'
-      : position error = 4.751191 mm\n\t'Distal_Thumb_L' : position error = 2.535774
-      mm\n\t'Proximal_Ring_L' : position error = 7.909972 mm\n\t'Intermediate_Ring_L'
-      : position error = 3.430743 mm\n\t'Distal_Ring_L' : position error = 1.993437
-      mm\n\t'Proximal_Middle_L' : position error = 7.783700 mm\n\t'Intermediate_Middle_L'
-      : position error = 3.700167 mm\n\t'Distal_Middle_L' : position error = 2.297764
-      mm\n\t'Proximal_Little_L' : position error = 7.957927 mm\n\t'Intermediate_Little_L'
-      : position error = 3.136199 mm\n\t'Distal_Little_L' : position error = 1.821434
-      mm\n\t'Proximal_Index_L' : position error = 7.839726 mm\n\t'Intermediate_Index_L'
-      : position error = 3.320056 mm\n\t'Distal_Index_L' : position error = 2.058397
-      mm\n\t'Neck' : position error = 12.917597 mm\n\t'Head' : position error = 28.630589
-      mm\n\t'Eye_R' : position error = 14.225715 mm\n\t'Eye_L' : position error =
-      14.225767 mm\n"
+    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -68,11 +36,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: "A05_\u901A\u5E38\u30B8\u30E3\u30F3\u30D7"
-      takeName: "A05_\u901A\u5E38\u30B8\u30E3\u30F3\u30D7"
+      name: "M40_\u52DD\u5229"
+      takeName: "M40_\u52DD\u5229"
       internalID: 0
-      firstFrame: 20
-      lastFrame: 99
+      firstFrame: -1
+      lastFrame: 89
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

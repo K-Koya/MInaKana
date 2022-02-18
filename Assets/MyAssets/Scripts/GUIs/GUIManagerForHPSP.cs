@@ -9,8 +9,8 @@ using DG.Tweening;
 /// </summary>
 public class GUIManagerForHPSP : MonoBehaviour
 {
-    [SerializeField, Tooltip("指定した方のプレイヤー情報を反映する")]
-    string _Name = "";
+    [SerializeField, Tooltip("_Nameに指定したキャラクターのステータス")]
+    PlayerStatus _Status = default;
 
     [SerializeField, Tooltip("HPを視覚的に割合表示するための画像")]
     Image _HPGauge = default; 
@@ -24,37 +24,41 @@ public class GUIManagerForHPSP : MonoBehaviour
     [SerializeField, Tooltip("SPの数値を実数表示するテキスト")]
     Text _SPValue = default;
 
-    /// <summary> _Nameに指定したキャラクターのステータス </summary>
-    PlayerStatus _status = default;
+    
 
     /// <summary> キャラクターの最大HP </summary>
-    short _HPInitial => _status.HPInitial;
+    short _HPInitial => _Status.HPInitial;
 
     /// <summary> キャラクターの今のHP </summary>
-    short _HPCurrent => _status.HPCurrent;
+    short _HPCurrent => _Status.HPCurrent;
     /// <summary> 前フレームのキャラクターのHP </summary>
     short _BeforeHPCurrent = 0;
 
     /// <summary> キャラクターの最大SP </summary>
-    short _SPInitial => _status.SPInitial;
+    short _SPInitial => _Status.SPInitial;
 
     /// <summary> キャラクターの今のSP </summary>
-    short _SPCurrent => _status.SPCurrent;
+    short _SPCurrent => _Status.SPCurrent;
     /// <summary> 前フレームのキャラクターのSP </summary>
     short _BeforeSPCurrent = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        //名前が_Nameのキャラクターのステータスを取得する
-        List<PlayerStatus> players = PlayerStatus.Players;
-        if(players.Count > 0) _status = players.Where(p => p.Name == _Name).First();
+        //HP表示初期化
+        _HPGauge.fillAmount = _HPCurrent / (float)_HPInitial;
+        _HPValue.text = _HPCurrent + " / " + _HPInitial;
+        _BeforeHPCurrent = _HPCurrent;
+        //SP表示初期化
+        _SPGauge.fillAmount = _SPCurrent / (float)_SPInitial;
+        _SPValue.text = _SPCurrent + " / " + _SPInitial;
+        _BeforeSPCurrent = _SPCurrent;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_status == null) return;
+        if (_Status == null) return;
 
         //数値に変化があればGUIも更新
         if(_BeforeHPCurrent != _HPCurrent)

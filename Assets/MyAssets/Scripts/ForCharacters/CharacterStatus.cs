@@ -103,7 +103,7 @@ public abstract class CharacterStatus : MonoBehaviour
     public int GaveDamage(int attack, float ratio)
     {
         //ダメージ計算(倍率0.95～1.05でダメージ変動あり)
-        int damage = (int)(calculateDamage(_Defense - attack) * ratio * Random.Range(0.95f, 1.05f));
+        int damage = (int)(calculateDamage(attack - _Defense) * ratio * Random.Range(0.95f, 1.05f));
 
         //ダメージ分減算
         _HPCurrent = (short)Mathf.Max(0, _HPCurrent - damage);

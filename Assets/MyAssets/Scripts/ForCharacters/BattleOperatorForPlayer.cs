@@ -68,8 +68,14 @@ public class BattleOperatorForPlayer : BattleOperator
     [SerializeField, Tooltip("アニメーション名 : 踏みつけジャンプ")]
     protected string _AnimNameStepJump = "OnStepJump";
 
-    [SerializeField, Tooltip("パラメーター名 : DOTweenを使っている")]
-    protected string _AnimNameUseTween = "OnUseTween";
+    [SerializeField, Tooltip("アニメーション名 : 回避ジャンプ")]
+    protected string _AnimNameDodgeJump = "OnDodgeJump";
+
+    [SerializeField, Tooltip("アニメーション名 : 回避踏みつけジャンプ")]
+    protected string _AnimNameDodgeStepJump = "OnDodgeStepJum";
+
+    [SerializeField, Tooltip("パラメーター名 : コマンド実行中")]
+    protected string _AnimParamCommandRunning = "OnCommandRunning";
     #endregion
 
     #region メンバー変数
@@ -179,7 +185,11 @@ public class BattleOperatorForPlayer : BattleOperator
         {
             _RB.isKinematic = true;
         }
+
+        //Animatorに接地フラグを設定
         _Motion.SetBool(_AnimParamGrounded, (_Status as PlayerStatus).IsGrounded);
+        //Animatorにコマンド実行フラグを設定
+        _Motion.SetBool(_AnimParamCommandRunning, _RunningCommand != null);
     }
 
     /// <summary>
@@ -373,11 +383,13 @@ public class BattleOperatorForPlayer : BattleOperator
     /// </summary>
     protected override void OperateCounter()
     {
+        if (_Status.IsDefeated) return;
+
         //ジャンプ回避
         if (InputAssistant.GetDownJump(_Status.Number))
         {
             (_Status as PlayerStatus).DoJump(1f);
-            _Motion.Play(_AnimNameJump);
+            _Motion.Play(_AnimNameDodgeJump);
         }   
     }
 
@@ -387,7 +399,7 @@ public class BattleOperatorForPlayer : BattleOperator
     public void DoTrample(float powerRatio)
     {
         (_Status as PlayerStatus).DoJump(powerRatio, true);
-        _Motion.Play(_AnimNameStepJump);
+        _Motion.Play(_AnimNameDodgeStepJump);
     }
 
     /// <summary>

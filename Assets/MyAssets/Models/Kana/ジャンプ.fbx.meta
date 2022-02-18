@@ -39,7 +39,7 @@ ModelImporter:
       name: "A05_\u901A\u5E38\u30B8\u30E3\u30F3\u30D7"
       takeName: "A05_\u901A\u5E38\u30B8\u30E3\u30F3\u30D7"
       internalID: 0
-      firstFrame: -1
+      firstFrame: 20
       lastFrame: 99
       wrapMode: 0
       orientationOffsetY: 0

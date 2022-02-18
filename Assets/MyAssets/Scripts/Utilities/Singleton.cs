@@ -15,7 +15,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     /// <summary>
     /// Inspector上に出ているシングルトンのコンポーネントインスタンス
     /// </summary>
-    static T _I = default;
+    static T _I;
 
 
     /* プロパティ */
@@ -29,7 +29,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
             //対象のシングルトンコンポーネントが登録されてなければ、現在のシーンから拾ってくる
             if (!_I)
             {
-                _I = FindObjectOfType<T>();
+                _I = (T)FindObjectOfType(typeof(T));
                 if (!_I) Debug.LogError("シングルトンコンポーネントの " + typeof(T) + " が、現在のシーンに存在しません！");
             }
             return _I;
@@ -49,7 +49,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
         //登録されているシングルトンコンポーネントが自分のインスタンスと同じなら、DontDestroyOnLoadに登録する
         //異なれば、自分を破棄する
-        if (_I && this != I) Destroy(this.gameObject);
+        if (this != I) Destroy(this.gameObject);
         else
         {
             DontDestroyOnLoad(this.gameObject);

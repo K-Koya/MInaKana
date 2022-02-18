@@ -8,10 +8,11 @@ using System.IO;
 public static class CSVIO
 {
     /// <summary> 使用する文字コード </summary>
-    const string _ENCODER = "shift-jis";
+    const string _ENCODER = "UTF-8";
 
     /// <summary> 改行コード </summary>
     public const string _LINE_CODE = "END_ROW";
+
 
 
     /// <summary>
@@ -20,6 +21,7 @@ public static class CSVIO
     /// <param name="datam"> 先頭のみ書き込み先のCSVファイル名で、以降はメンバ変数のリスト型 </param>
     public static void SaveCSV(List<string> datam)
     {
+        //TODO
         try
         {
             //書き込みオブジェクト作成し書き込み処理
@@ -50,16 +52,19 @@ public static class CSVIO
     /// <returns> 読みだした文字列リストのデータ </returns>
     public static List<string> LoadCSV(string path)
     {
+        //csvファイル用変数
+        TextAsset csvFile = Resources.Load(path) as TextAsset;
+        
         //データ格納用文字列
         List<string> datam = new List<string>();
 
         try
         {
             //読み込みオブジェクト作成し読み込み処理
-            using (StreamReader reader = new StreamReader(@path, System.Text.Encoding.GetEncoding(_ENCODER)))
+            using (StringReader reader = new StringReader(csvFile.text))
             {
                 //ファイル終わりまで読み出し
-                while (!reader.EndOfStream)
+                while (reader.Peek() != -1)
                 {
                     //読みだしてカンマ区切りで配列化
                     string[] readed = reader.ReadLine().Split(',');

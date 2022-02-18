@@ -9,9 +9,6 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerStatus : CharacterStatus , ICSVDataConverter
 {
-    /// <summary> 二人のプレイヤー情報を静的保管 </summary>
-    static List<PlayerStatus> _players = new List<PlayerStatus>(); 
-
     #region 定数
     /// <summary> パラメーター名:SP </summary>
     public const string PARAMETER_NAME_SP = "SP";
@@ -37,18 +34,10 @@ public class PlayerStatus : CharacterStatus , ICSVDataConverter
     public override short SPInitial { get => _SPInitial; set => _SPInitial = value; }
     /// <summary> 現在SP </summary>
     public override short SPCurrent { get => _SPCurrent; set => _SPCurrent = value; }
-    /// <summary> 二人のプレイヤー情報を静的保管 </summary>
-    public static List<PlayerStatus> Players { get => _players; }
     /// <summary> true : 地面についている </summary>
     public bool IsGrounded { get => _IsGrounded; }
 
     #endregion
-
-
-    void Awake()
-    {
-        _players.Add(this);
-    }
 
     // Start is called before the first frame update
     protected override void Start()
