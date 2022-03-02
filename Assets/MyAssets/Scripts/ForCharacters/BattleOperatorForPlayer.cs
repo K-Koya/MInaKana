@@ -41,8 +41,12 @@ public enum InputEvaluation : byte
 /// <summary> コマンド効果の対象 </summary>
 public enum TargetType : byte
 {
+    /// <summary> 自分 </summary>
+    Own,
     /// <summary> 味方 </summary>
     Allies,
+    /// <summary> 味方全体 </summary>
+    AllAllies,
     /// <summary> 敵単体 </summary>
     OneEnemy,
     /// <summary> 敵単体次々 </summary>
@@ -56,6 +60,7 @@ public enum TargetType : byte
 /// <summary>
 /// プレイヤーキャラクターの戦闘時の操作
 /// </summary>
+[RequireComponent(typeof(HumanoidAnimatorAssistant))]
 public class BattleOperatorForPlayer : BattleOperator
 {
     #region Animator用
@@ -76,6 +81,18 @@ public class BattleOperatorForPlayer : BattleOperator
 
     [SerializeField, Tooltip("パラメーター名 : コマンド実行中")]
     protected string _AnimParamCommandRunning = "OnCommandRunning";
+
+    [SerializeField, Tooltip("パラメーター名 : 戦闘思考中")]
+    protected string _AnimParamThinking = "OnThinking";
+
+    [SerializeField, Tooltip("パラメーター名 : 戦闘コマンド決定")]
+    protected string _AnimParamCommandCorrect = "OnCommandCorrect";
+
+    [SerializeField, Tooltip("パラメーター名 : 踏みつけ失敗")]
+    protected string _AnimParamTrampleFailed = "TrampleFailed";
+
+    [SerializeField, Tooltip("パラメーター名 : 踏みつけ失敗後コケ中")]
+    protected string _AnimParamAfterTrampleFailed = "OnAfterTrampleFailed";
     #endregion
 
     #region メンバー変数
@@ -83,6 +100,9 @@ public class BattleOperatorForPlayer : BattleOperator
     bool _IsInitMyTurn = true;
 
     [Header("派生クラスパラメーター")]
+    [SerializeField, Tooltip("Humanoidモデル用アニメーター補助コンポーネント")]
+    HumanoidAnimatorAssistant _HumAnimator = default;
+
     [SerializeField, Tooltip("最上位コマンドカードメニューで選択中のもの")]
     FirstMenu _FirstMenu = FirstMenu.Solo;
 
@@ -153,6 +173,7 @@ public class BattleOperatorForPlayer : BattleOperator
         _IsInitMyTurn = true;
 
         _RB = GetComponent<Rigidbody>();
+        _HumAnimator = GetComponent<HumanoidAnimatorAssistant>();
 
         #region 各コマンドを初期化＆Runメソッドの紐づけ(ただし、先頭 index = 0 は Backコマンド用にnullを指定)
 
@@ -168,6 +189,7 @@ public class BattleOperatorForPlayer : BattleOperator
 
         /* 様子見 */
         _PassCommands.Add(null);
+        _PassCommands.Add(new Command_Pass_Abandon(PassAbandon));
 
         #endregion
     }
@@ -187,9 +209,9 @@ public class BattleOperatorForPlayer : BattleOperator
         }
 
         //Animatorに接地フラグを設定
-        _Motion.SetBool(_AnimParamGrounded, (_Status as PlayerStatus).IsGrounded);
+        _Animator.SetBool(_AnimParamGrounded, (_Status as PlayerStatus).IsGrounded);
         //Animatorにコマンド実行フラグを設定
-        _Motion.SetBool(_AnimParamCommandRunning, _RunningCommand != null);
+        _Animator.SetBool(_AnimParamCommandRunning, _RunningCommand != null);
     }
 
     /// <summary>
@@ -204,7 +226,7 @@ public class BattleOperatorForPlayer : BattleOperator
             if(_IsInitMyTurn)
             {
                 //待機中モーション
-                _Motion.Play(_AnimNameStay);
+                _HumAnimator.PlaySmooth(_AnimParamThinking);
 
                 //決定入力ナビ
                 GUIPlayersInputNavigation.CorrectOrder(_Status.Number, true);
@@ -230,6 +252,9 @@ public class BattleOperatorForPlayer : BattleOperator
                     GUIPlayersInputNavigation.CursorVerticalOrder(_Status.Number, true);
                     GUIPlayersInputNavigation.BackOrder(_Status.Number, true);
 
+                    //コマンド決定
+                    _HumAnimator.PlaySmooth(_AnimParamCommandCorrect);
+
                     switch (_FirstMenu)
                     {
                         case FirstMenu.Solo:
@@ -245,6 +270,7 @@ public class BattleOperatorForPlayer : BattleOperator
                             break;
                         case FirstMenu.Pass:
                             _SecondMenu = _PassCommands;
+                            _SecondMenu.ForEach(sm => { if (sm != null) sm.SetUsable(true, _Status.SPCurrent); });
                             break;
                         case FirstMenu.Leave:
                             _SecondMenu = new List<CommandBase>() { _LeaveCommand };
@@ -276,6 +302,9 @@ public class BattleOperatorForPlayer : BattleOperator
                     }
                     else
                     {
+                        //コマンド決定
+                        _HumAnimator.PlaySmooth(_AnimParamCommandCorrect);
+
                         _Candidate = _SecondMenu[_SecondMenuIndex];
                         //使用不可コマンドまたはSP不足なら無反応に
                         if (!_Candidate.IsUsable)
@@ -307,6 +336,8 @@ public class BattleOperatorForPlayer : BattleOperator
                         maxIndex = _Enemies.Length + 1;
                         break;
                     case TargetType.AllEnemies:
+                    case TargetType.Own:
+                    case TargetType.AllAllies:
                         maxIndex = 2;
                         break;
                     case TargetType.Allies:
@@ -337,6 +368,9 @@ public class BattleOperatorForPlayer : BattleOperator
                         if (_FirstMenu == FirstMenu.Item) _Candidate.Value -= 1;
                         else _Status.SPCurrent -= _Candidate.Value;
 
+                        //戦闘の待機状態へ
+                        _HumAnimator.PlaySmooth(_AnimNameStay);
+
                         switch (_Candidate.Target)
                         {
                             case TargetType.OneEnemy:
@@ -352,8 +386,14 @@ public class BattleOperatorForPlayer : BattleOperator
                                 list.RemoveAt(_TargetIndex);
                                 _RunningCommand = StartCoroutine(_Candidate.Run(list.ToArray()));
                                 break;
+                            case TargetType.Own:
+                                _RunningCommand = StartCoroutine(_Candidate.Run(this));
+                                break;
                             case TargetType.Allies:
                                 _RunningCommand = StartCoroutine(_Candidate.Run(_Players[_TargetIndex - 1]));
+                                break;
+                            case TargetType.AllAllies:
+                                _RunningCommand = StartCoroutine(_Candidate.Run(_Players));
                                 break;
                             default: break;
                         }
@@ -389,8 +429,8 @@ public class BattleOperatorForPlayer : BattleOperator
         if (InputAssistant.GetDownJump(_Status.Number))
         {
             (_Status as PlayerStatus).DoJump(1f);
-            _Motion.Play(_AnimNameDodgeJump);
-        }   
+            _HumAnimator.PlaySmooth(_AnimNameDodgeJump);
+        }
     }
 
     /// <summary>
@@ -399,7 +439,7 @@ public class BattleOperatorForPlayer : BattleOperator
     public void DoTrample(float powerRatio)
     {
         (_Status as PlayerStatus).DoJump(powerRatio, true);
-        _Motion.Play(_AnimNameDodgeStepJump);
+        _HumAnimator.PlaySmooth(_AnimNameDodgeStepJump);
     }
 
     /// <summary>
@@ -477,8 +517,8 @@ public class BattleOperatorForPlayer : BattleOperator
 
         //助走して敵頭上にジャンプTween開始
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(transform.DOMove(jumpPoint, 0.5f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameRun)));
-        sequence.Append(transform.DOJump(target.HeadPoint, 3.0f, 1, 0.7f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameJump)));
+        sequence.Append(transform.DOMove(jumpPoint, 0.5f).SetEase(Ease.Linear).OnStart(() => _HumAnimator.PlaySmooth(_AnimNameRun)));
+        sequence.Append(transform.DOJump(target.HeadPoint, 3.0f, 1, 0.7f).SetEase(Ease.Linear).OnStart(() => _HumAnimator.PlaySmooth(_AnimNameJump)));
         sequence.Play().OnUpdate(() => 
         {
             //入力状態が初期値でボタン入力があれば、タイミングの良し悪しを判定し入力状態に反映
@@ -499,7 +539,7 @@ public class BattleOperatorForPlayer : BattleOperator
             _InputResult = InputEvaluation.Initial;
             //2回目のジャンプで入力を再評価
             sequence = transform.DOJump(target.HeadPoint, 2.0f, 1, 0.5f).SetEase(Ease.Linear).OnStart(() => 
-            _Motion.Play(_AnimNameStepJump)).OnUpdate(() =>
+            _HumAnimator.PlaySmooth(_AnimNameStepJump)).OnUpdate(() =>
             {
                 if (InputAssistant.GetDownJump(_Status.Number) && _InputResult == InputEvaluation.Initial) _InputResult = _NowEvaluation;
             });
@@ -514,9 +554,9 @@ public class BattleOperatorForPlayer : BattleOperator
                 //ダメージ発生
                 target.GaveDamage(_Status.Attack, 1f);
 
-                sequence = DOTween.Sequence().Append(transform.DOJump(target.transform.position + (Vector3.forward * 5f), 2.0f, 1, 0.5f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameJump)));
+                sequence = DOTween.Sequence().Append(transform.DOJump(target.transform.position + (Vector3.forward * 5f), 2.0f, 1, 0.5f).SetEase(Ease.Linear).OnStart(() => _HumAnimator.PlaySmooth(_AnimNameJump)));
                 sequence.Append(transform.DOMove(_BasePosition + Vector3.back * 3f, 0.05f).SetEase(Ease.INTERNAL_Zero));
-                sequence.Append(transform.DOMove(_BasePosition, 0.3f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameRun)));
+                sequence.Append(transform.DOMove(_BasePosition, 0.3f).SetEase(Ease.Linear).OnStart(() => _HumAnimator.PlaySmooth(_AnimNameRun)));
                 sequence.Play();
             }
             //入力判定がGreat
@@ -525,8 +565,8 @@ public class BattleOperatorForPlayer : BattleOperator
                 //ダメージ発生
                 target.GaveDamage(_Status.Attack, 0.8f);
 
-                sequence = DOTween.Sequence().Append(transform.DOJump(jumpPoint, 2.0f, 1, 0.5f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameJump)));
-                sequence.Append(transform.DOMove(_BasePosition, 1f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameBackward)));
+                sequence = DOTween.Sequence().Append(transform.DOJump(jumpPoint, 2.0f, 1, 0.5f).SetEase(Ease.Linear).OnStart(() => _HumAnimator.PlaySmooth(_AnimNameJump)));
+                sequence.Append(transform.DOMove(_BasePosition, 1f).SetEase(Ease.Linear).OnStart(() => _HumAnimator.PlaySmooth(_AnimNameBackward)));
                 sequence.Play();
             }
             //入力判定がMiss
@@ -535,8 +575,8 @@ public class BattleOperatorForPlayer : BattleOperator
                 //ダメージ発生
                 target.GaveDamage(_Status.Attack, 0.4f);
 
-                sequence = DOTween.Sequence().Append(transform.DOJump(jumpPoint, 1.5f, 1, 0.5f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameJump)));
-                sequence.Append(transform.DOMove(_BasePosition, 1f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameBackward)));
+                sequence = DOTween.Sequence().Append(transform.DOJump(jumpPoint, 1.5f, 1, 0.5f).SetEase(Ease.Linear).OnStart(() => _HumAnimator.PlaySmooth(_AnimNameJump)));
+                sequence.Append(transform.DOMove(_BasePosition, 1f).SetEase(Ease.Linear).OnStart(() => _HumAnimator.PlaySmooth(_AnimNameBackward)));
                 sequence.Play();
             }
         }
@@ -546,8 +586,8 @@ public class BattleOperatorForPlayer : BattleOperator
             //ダメージ発生
             target.GaveDamage(_Status.Attack, 0.25f);
 
-            sequence = DOTween.Sequence().Append(transform.DOJump(jumpPoint, 1.5f, 1, 0.5f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameJump)));
-            sequence.Append(transform.DOMove(_BasePosition, 1f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameBackward)));
+            sequence = DOTween.Sequence().Append(transform.DOJump(jumpPoint, 1.5f, 1, 0.5f).SetEase(Ease.Linear).OnStart(() => _HumAnimator.PlaySmooth(_AnimNameJump)));
+            sequence.Append(transform.DOMove(_BasePosition, 1f).SetEase(Ease.Linear).OnStart(() => _HumAnimator.PlaySmooth(_AnimNameBackward)));
             sequence.Play();
         }
         //入力判定がMiss
@@ -556,8 +596,8 @@ public class BattleOperatorForPlayer : BattleOperator
             //ダメージ発生
             target.GaveDamage(_Status.Attack, 0.1f);
 
-            sequence = DOTween.Sequence().Append(transform.DOJump(jumpPoint, 1.0f, 2, 1.0f).SetEase(Ease.OutCubic));
-            sequence.Append(transform.DOMove(_BasePosition, 1f).SetEase(Ease.Linear).OnStart(() => _Motion.Play(_AnimNameBackward)));
+            sequence = DOTween.Sequence().Append(transform.DOJump(jumpPoint, 1.0f, 2, 1.0f).SetEase(Ease.OutCubic).OnStart(() => _HumAnimator.PlaySmooth(_AnimParamTrampleFailed)));
+            sequence.Append(transform.DOMove(_BasePosition, 1f).SetEase(Ease.Linear).OnStart(() => _HumAnimator.PlaySmooth(_AnimNameBackward)));
             sequence.Play();
         }
 
@@ -568,14 +608,28 @@ public class BattleOperatorForPlayer : BattleOperator
         GUIPlayersInputNavigation.JumpOrder();
 
         //待機状態に
-        _Motion.Play(_AnimNameStay);
+        _HumAnimator.PlaySmooth(_AnimNameStay);
 
+        _Status.IsMyTurn = false;
+    }
+
+    /// <summary>
+    /// 何もせずにパスするシーケンス
+    /// </summary>
+    /// <param name="targets">対象</param>
+    /// <returns></returns>
+    IEnumerator PassAbandon(params BattleOperator[] targets)
+    {
+        yield return new WaitForSeconds(1.0f);
         _Status.IsMyTurn = false;
     }
 
     #endregion
 }
 
+
+
+#region コマンド用クラス
 /// <summary> 全コマンド基底クラス </summary>
 public abstract class CommandBase
 {
@@ -633,7 +687,7 @@ public abstract class CommandBase
 public class Command_Attack_Jump : CommandBase
 {
     /// <summary> ジャンプ踏みつけ攻撃 </summary>
-    /// <param name="action">ジャンプ踏みつけ攻撃の動作メソッド</param>
+    /// <param name="run">ジャンプ踏みつけ攻撃の動作メソッド</param>
     public Command_Attack_Jump(CommandCorotine run)
     {
         _Name = "ジャンプ";
@@ -644,4 +698,24 @@ public class Command_Attack_Jump : CommandBase
         _IsUsable = true;
         Run = run;
     }
-} 
+}
+
+/// <summary> 今の自分のターンを放棄するコマンド </summary>
+public class Command_Pass_Abandon : CommandBase
+{
+    /// <summary> 今の自分のターンを放棄するコマンド </summary>
+    /// <param name="run"> ターン放棄動作メソッド </param>
+    public Command_Pass_Abandon(CommandCorotine run)
+    {
+        _Name = "なにもしない";
+        _TargetType = TargetType.Own;
+        _ConsumeValue = 0;
+        _Explain = "このターンは何もしないで終わるぞ";
+        _IsAcquired = true;
+        _IsUsable = true;
+        Run = run;
+    }
+}
+
+
+#endregion

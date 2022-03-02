@@ -213,13 +213,23 @@ public class GUICommandMotion : MonoBehaviour
                 Array.ForEach(targets, t => t.IsTargeted = false);
                 if (_BattleOperator.TargetIndex > 0) targets[_BattleOperator.TargetIndex - 1].IsTargeted = true;
                 break;
+
             case TargetType.AllEnemies:
                 targets = _BattleOperator.ActiveEnemies;
                 numberOfTarget = 2;
 
                 //ターゲット用矢印を表示
-                Array.ForEach(targets, t => t.IsTargeted = true);
+                Array.ForEach(targets, t => t.IsTargeted = _BattleOperator.TargetIndex == 1);
                 break;
+
+            case TargetType.Own:
+                targets = new BattleOperator[]{ _BattleOperator };
+                numberOfTarget = 2;
+
+                //ターゲット用矢印を表示
+                _BattleOperator.IsTargeted = _BattleOperator.TargetIndex == 1;
+                break;
+
             case TargetType.Allies:
                 targets = _BattleOperator.Players;
                 numberOfTarget = targets.Length + 1;
@@ -228,6 +238,15 @@ public class GUICommandMotion : MonoBehaviour
                 Array.ForEach(targets, t => t.IsTargeted = false);
                 if (_BattleOperator.TargetIndex > 0) targets[_BattleOperator.TargetIndex - 1].IsTargeted = true;
                 break;
+
+            case TargetType.AllAllies:
+                targets = _BattleOperator.ActivePlayers;
+                numberOfTarget = 2;
+
+                //ターゲット用矢印を表示
+                Array.ForEach(targets, t => t.IsTargeted = _BattleOperator.TargetIndex == 1);
+                break;
+
             default: break;
         }
 

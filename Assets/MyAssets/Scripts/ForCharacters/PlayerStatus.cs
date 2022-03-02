@@ -49,12 +49,12 @@ public class PlayerStatus : CharacterStatus , ICSVDataConverter
         _RB = GetComponent<Rigidbody>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         //èdóÕóéâ∫
         if (!_RB.isKinematic)
         {
-            Vector3 gravityAccelarate = -transform.up * _JumpPower * 0.75f;
+            Vector3 gravityAccelarate = -transform.up * _JumpPower * 2.5f;
             _RB.AddForce(gravityAccelarate, ForceMode.Acceleration);
         }
     }

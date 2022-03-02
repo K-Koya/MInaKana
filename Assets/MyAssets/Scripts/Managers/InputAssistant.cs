@@ -163,13 +163,4 @@ public class InputAssistant : Singleton<InputAssistant>
         _SelectRight[0] = actionMap[_ButtonName1PRight];
         _SelectRight[1] = actionMap[_ButtonName2PRight];
     }
-
-    void Update()
-    {
-        if (GetDownMenu) Debug.Log("Menu : Pushed!");
-        if (GetDownJump(1)) Debug.Log("Jump1 : Pushed!");
-        if (GetDownJump(2)) Debug.Log("Jump2 : Pushed!");
-        if (GetDownAttack(1)) Debug.Log("Attack1 : Pushed!");
-        if (GetDownAttack(2)) Debug.Log("Attack2 : Pushed!");
-    }
 }

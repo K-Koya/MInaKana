@@ -1582,10 +1582,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _FirstMenuTransforms:
   - {fileID: 917259463}
-  - {fileID: 1938572557}
-  - {fileID: 1797596416}
-  - {fileID: 1215528364}
   - {fileID: 168570771}
+  - {fileID: 1215528364}
+  - {fileID: 1797596416}
+  - {fileID: 1938572557}
   _SecondMenuTexts:
   - {fileID: 518161843}
   - {fileID: 640067566}
@@ -2527,7 +2527,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1958077484
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2535,17 +2535,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1958077483}
-  m_LocalRotation: {x: 0, y: 0, z: 0.92387956, w: 0.38268343}
+  m_LocalRotation: {x: 0, y: 0, z: 0.38268343, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1081930926}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 135}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 45}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1, y: 2.5}
+  m_AnchoredPosition: {x: 1, y: -1}
   m_SizeDelta: {x: 2, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1958077487
@@ -3108,7 +3108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b6b9ebcf053dfb419cc053f937d4e19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _TargetArrow: {fileID: 0}
+  _TargetArrow: {fileID: 1958077483}
   _Motion: {fileID: 1952714190145798820}
   _AnimParamDefeated: DoDefeat
   _AnimParamGrounded: IsGrounded
@@ -3121,6 +3121,10 @@ MonoBehaviour:
   _AnimNameDodgeJump: "A05_\u901A\u5E38\u30B8\u30E3\u30F3\u30D7"
   _AnimNameDodgeStepJump: "A08_\u5E45\u8DF3\u3073\u30B8\u30E3\u30F3\u30D7"
   _AnimParamCommandRunning: IsCommandRunning
+  _AnimParamThinking: "M05_\u6226\u95D8\u601D\u8003\u4E2D"
+  _AnimParamCommandCorrect: "M07_\u6226\u95D8\u30B3\u30DE\u30F3\u30C9\u6C7A\u5B9A"
+  _AnimParamTrampleFailed: "M31_\u8E0F\u307F\u3064\u3051\u5931\u6557"
+  _AnimParamAfterTrampleFailed: "M32_\u8E0F\u307F\u3064\u3051\u5931\u6557\u30B3\u30B1\u4E2D"
   _FirstMenu: 0
   _SecondMenuIndex: 0
   _TargetIndex: 0

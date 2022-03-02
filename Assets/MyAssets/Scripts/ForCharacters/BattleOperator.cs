@@ -32,12 +32,15 @@ public abstract class BattleOperator : MonoBehaviour
 
     /// <summary> 実行中のコマンドの流れ </summary>
     protected Coroutine _RunningCommand = default;
+
+    /// <summary> 該当キャラクターの当たり判定 </summary>
+    protected Collider _Collider = default;
     #endregion
 
     #region Animator用
     [Header("以下にAnimator中のアニメーションの名前を登録")]
     [SerializeField, Tooltip("キャラクターのモーションを制御するアニメーター")]
-    protected Animator _Motion = default;
+    protected Animator _Animator = default;
 
     [SerializeField, Tooltip("パラメーター名 : やられ")]
     protected string _AnimParamDefeated = "OnDefeat";
@@ -89,6 +92,7 @@ public abstract class BattleOperator : MonoBehaviour
         _Status = GetComponent<CharacterStatus>();
         _Players = FindObjectsOfType<BattleOperatorForPlayer>();
         _Enemies = FindObjectsOfType<BattleOperatorForEnemy>();
+        _Collider = GetComponent<Collider>();
     }
 
     // Start is called before the first frame update
@@ -104,7 +108,7 @@ public abstract class BattleOperator : MonoBehaviour
         //ターゲット矢印を非表示
         _TargetArrow.SetActive(false);
 
-        if (!_Motion) _Motion = GetComponent<Animator>();
+        if (!_Animator) _Animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -140,10 +144,10 @@ public abstract class BattleOperator : MonoBehaviour
         VisualizeDamage(damage, transform.position);
 
         //ダメージリアクション
-        _Motion.Play(_AnimNameDamage);
+        _Animator.Play(_AnimNameDamage);
 
         //やられたらやられモーションを促す
-        if(_Status.IsDefeated) _Motion.SetTrigger(_AnimParamDefeated);
+        if(_Status.IsDefeated) _Animator.SetTrigger(_AnimParamDefeated);
     }
     
 

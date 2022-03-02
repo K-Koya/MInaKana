@@ -2210,7 +2210,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1447760916
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2218,17 +2218,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1447760915}
-  m_LocalRotation: {x: 0, y: 0, z: 0.92387956, w: 0.38268343}
+  m_LocalRotation: {x: 0, y: 0, z: 0.38268343, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1221727749}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 135}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 45}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1, y: 2.5}
+  m_AnchoredPosition: {x: 1, y: -1}
   m_SizeDelta: {x: 2, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1447760919
@@ -2516,10 +2516,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _FirstMenuTransforms:
   - {fileID: 1054894667}
-  - {fileID: 518531726}
-  - {fileID: 80526174}
-  - {fileID: 1164066489}
   - {fileID: 518353891}
+  - {fileID: 1164066489}
+  - {fileID: 80526174}
+  - {fileID: 518531726}
   _SecondMenuTexts:
   - {fileID: 574309484}
   - {fileID: 1495934695}
@@ -4625,6 +4625,10 @@ MonoBehaviour:
   _AnimNameDodgeJump: "A05_\u901A\u5E38\u30B8\u30E3\u30F3\u30D7"
   _AnimNameDodgeStepJump: "A08_\u5E45\u8DF3\u3073\u30B8\u30E3\u30F3\u30D7"
   _AnimParamCommandRunning: IsCommandRunning
+  _AnimParamThinking: "M05_\u6226\u95D8\u601D\u8003\u4E2D"
+  _AnimParamCommandCorrect: "M07_\u6226\u95D8\u30B3\u30DE\u30F3\u30C9\u6C7A\u5B9A"
+  _AnimParamTrampleFailed: "M31_\u8E0F\u307F\u3064\u3051\u5931\u6557"
+  _AnimParamAfterTrampleFailed: "M32_\u8E0F\u307F\u3064\u3051\u5931\u6557\u30B3\u30B1\u4E2D"
   _FirstMenu: 0
   _SecondMenuIndex: 0
   _TargetIndex: 0

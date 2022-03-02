@@ -42,6 +42,9 @@ public class BattleManager : MonoBehaviour
     /// <summary> 現在の行動者のステータス </summary>
     CharacterStatus _TurnOwner = default;
 
+    /// <summary> 次の行動者を見つけて指示させるイテレーター </summary>
+    IEnumerator _TurnInstructerIterator = default;
+
     /// <summary> Timelineカットを制御するコンポーネント </summary>
     PlayableDirector _PD = default;
 
@@ -99,19 +102,23 @@ public class BattleManager : MonoBehaviour
             case BattleSituation.OnBattle:
                 if (!_TurnOwner || !_TurnOwner.IsMyTurn)
                 {
-                    TurnInstructer();
+                    //イテレーター未定義なら定義、定義済みなら次のyieldまで実行し、最後まで実行済みなら始めから
+                    if(_TurnInstructerIterator == null) _TurnInstructerIterator = TurnInstructer();
+                    else _TurnInstructerIterator.MoveNext();
                     CheckSettlementToResult();
                 }
                 break;
             case BattleSituation.PlayerWin:
                 if (InputAssistant.GetDownMenu)
                 {
+                    _TurnInstructerIterator = null;
                     MySceneManager.I.SceneChange(MySceneManager.I.SceneNameTitle, 1f, LoadSceneEffectType.CircleBlack);
                 }
                 break;
             case BattleSituation.PlayerLose:
                 if (InputAssistant.GetDownMenu)
                 {
+                    _TurnInstructerIterator = null;
                     MySceneManager.I.SceneChange(MySceneManager.I.SceneNameTitle, 1f, LoadSceneEffectType.CircleBlack);
                 }
                 break;
@@ -158,8 +165,10 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// 次の行動者を見つけて指示する
     /// </summary>
-    void TurnInstructer()
+    IEnumerator TurnInstructer()
     {
+        yield return null;
+
         //敏捷蓄積値順にソート
         _BattleCharacters = _BattleCharacters.OrderByDescending(b => b.RapidAccumulation).ToList();
 
@@ -171,6 +180,8 @@ public class BattleManager : MonoBehaviour
         {
             _BattleCharacters.ForEach(b => b.RapidAccumulation += b.Rapid);
             _TurnOwner = ActiveCharacters.Where(b => b.RapidAccumulation >= TURN_BORDER).FirstOrDefault();
+
+            yield return null;
         }
 
         //あなたのターンです
@@ -178,6 +189,9 @@ public class BattleManager : MonoBehaviour
         _TurnOwner.RapidAccumulation -= TURN_BORDER;
 
         Debug.Log(_TurnOwner.Name + " のターンです。");
+
+        //このイテレーターを止める
+        _TurnInstructerIterator = null;
     }
 
     /// <summary>
@@ -188,12 +202,6 @@ public class BattleManager : MonoBehaviour
         //プレイヤーが一人も残っていない場合ゲームオーバー
         if (ActiveCharacters.OfType<PlayerStatus>().ToList().Count < 1)
         {
-            if (_TurnOwner)
-            {
-                _TurnOwner.IsMyTurn = false;
-                _TurnOwner = null;
-            }
-            
             _Situation = BattleSituation.PlayerLose;
             _PD.Play(_CutForLose);
             GUIPlayersInputNavigation.OrderReset();
@@ -201,12 +209,6 @@ public class BattleManager : MonoBehaviour
         //プレイヤーが残っていて敵が一体も残っていない場合勝利
         else if (ActiveCharacters.OfType<EnemyStatus>().ToList().Count < 1)
         {
-            if (_TurnOwner)
-            {
-                _TurnOwner.IsMyTurn = false;
-                _TurnOwner = null;
-            }
-
             _Situation = BattleSituation.PlayerWin;
             _PD.Play(_CutForWin);
             GUIPlayersInputNavigation.OrderReset();

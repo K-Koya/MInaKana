@@ -53,6 +53,7 @@ public abstract class CharacterStatus : MonoBehaviour
     /// <summary> キャラクター番号 </summary>
     protected byte _CharacterNumber = 0;
 
+    [Space]
     [SerializeField, Tooltip("true : このキャラクターのターン")]
     protected bool _IsMyTurn = false;
 
