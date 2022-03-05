@@ -3056,11 +3056,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1081930926}
   m_SourcePrefab: {fileID: 100100000, guid: 240ee4eb08ff4d244af365f69e66d4d7, type: 3}
---- !u!95 &1952714190145798820 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 240ee4eb08ff4d244af365f69e66d4d7, type: 3}
-  m_PrefabInstance: {fileID: 5364907129994084149}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5094296091127235172 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 240ee4eb08ff4d244af365f69e66d4d7, type: 3}
@@ -3109,7 +3104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _TargetArrow: {fileID: 1958077483}
-  _Motion: {fileID: 1952714190145798820}
+  _Animator: {fileID: 0}
   _AnimParamDefeated: DoDefeat
   _AnimParamGrounded: IsGrounded
   _AnimNameStay: "M01_\u6226\u95D8\u6642\u5F85\u6A5F"
@@ -3125,6 +3120,7 @@ MonoBehaviour:
   _AnimParamCommandCorrect: "M07_\u6226\u95D8\u30B3\u30DE\u30F3\u30C9\u6C7A\u5B9A"
   _AnimParamTrampleFailed: "M31_\u8E0F\u307F\u3064\u3051\u5931\u6557"
   _AnimParamAfterTrampleFailed: "M32_\u8E0F\u307F\u3064\u3051\u5931\u6557\u30B3\u30B1\u4E2D"
+  _HumAnimator: {fileID: 0}
   _FirstMenu: 0
   _SecondMenuIndex: 0
   _TargetIndex: 0
@@ -3155,6 +3151,46 @@ MonoBehaviour:
   _IsGrounded: 0
   _SPInitial: 100
   _SPCurrent: 100
+--- !u!114 &3186921955972713871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5094296091127235172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcf4bd25c65225c4ab99f0b9fe9050b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ParamNameDoEyeBlink: DoEyeBlink
+  _ParamNameEyeOpenRatio: EyeOpenRatio
+  lookTarget: {fileID: 0}
+  lookTargetWeight: 0
+  lookTargetBodyWeight: 0
+  lookTargetHeadWeight: 0
+  lookTargetEyesWeight: 0
+  lookTargetClampWeight: 0
+--- !u!114 &2154364755205874201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5094296091127235172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcf4bd25c65225c4ab99f0b9fe9050b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ParamNameDoEyeBlink: DoEyeBlink
+  _ParamNameEyeOpenRatio: EyeOpenRatio
+  lookTarget: {fileID: 0}
+  lookTargetWeight: 0
+  lookTargetBodyWeight: 0
+  lookTargetHeadWeight: 0
+  lookTargetEyesWeight: 0
+  lookTargetClampWeight: 0
 --- !u!4 &5618596644959066334 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 240ee4eb08ff4d244af365f69e66d4d7, type: 3}

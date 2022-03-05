@@ -1045,11 +1045,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 240ee4eb08ff4d244af365f69e66d4d7, type: 3}
   m_PrefabInstance: {fileID: 168370475}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &168370477 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 240ee4eb08ff4d244af365f69e66d4d7, type: 3}
-  m_PrefabInstance: {fileID: 168370475}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &168370478 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 240ee4eb08ff4d244af365f69e66d4d7, type: 3}
@@ -4665,21 +4660,21 @@ PlayableDirector:
   - key: {fileID: -8587100559658154797, guid: 9a359200a50102540a3d7f8cbc9f3277, type: 2}
     value: {fileID: 963194229}
   - key: {fileID: -139269759374588515, guid: 6021e82792d7de44ead66c1aad0f8c5c, type: 2}
-    value: {fileID: 168370477}
+    value: {fileID: 0}
   - key: {fileID: -6182649689783847937, guid: 6021e82792d7de44ead66c1aad0f8c5c, type: 2}
-    value: {fileID: 168370477}
+    value: {fileID: 0}
   - key: {fileID: -8503368150637594422, guid: 6021e82792d7de44ead66c1aad0f8c5c, type: 2}
-    value: {fileID: 1751831204}
+    value: {fileID: 0}
   - key: {fileID: -3460686591807137948, guid: 6021e82792d7de44ead66c1aad0f8c5c, type: 2}
-    value: {fileID: 1751831204}
+    value: {fileID: 0}
   - key: {fileID: 1446528740775347178, guid: 31f5193ba7034d043bbe5582fbe4dfeb, type: 2}
     value: {fileID: 1658622954}
   - key: {fileID: -4686383648919867903, guid: 9a359200a50102540a3d7f8cbc9f3277, type: 2}
     value: {fileID: 1147416497}
   - key: {fileID: 504707382181020832, guid: 9a359200a50102540a3d7f8cbc9f3277, type: 2}
-    value: {fileID: 168370477}
+    value: {fileID: 0}
   - key: {fileID: -1597111122779100605, guid: 9a359200a50102540a3d7f8cbc9f3277, type: 2}
-    value: {fileID: 1751831204}
+    value: {fileID: 0}
   - key: {fileID: -4614799667181035561, guid: 6021e82792d7de44ead66c1aad0f8c5c, type: 2}
     value: {fileID: 447162747}
   - key: {fileID: -3065403071228484384, guid: 9a359200a50102540a3d7f8cbc9f3277, type: 2}
@@ -4689,9 +4684,9 @@ PlayableDirector:
   - key: {fileID: 2026501084740220194, guid: 9a359200a50102540a3d7f8cbc9f3277, type: 2}
     value: {fileID: 2012056244}
   - key: {fileID: 4237051216580838698, guid: 31f5193ba7034d043bbe5582fbe4dfeb, type: 2}
-    value: {fileID: 168370477}
+    value: {fileID: 0}
   - key: {fileID: -1771930016506577565, guid: 31f5193ba7034d043bbe5582fbe4dfeb, type: 2}
-    value: {fileID: 1751831204}
+    value: {fileID: 0}
   - key: {fileID: 1044414799508363147, guid: 31f5193ba7034d043bbe5582fbe4dfeb, type: 2}
     value: {fileID: 409144703}
   - key: {fileID: -4508233934674583975, guid: 31f5193ba7034d043bbe5582fbe4dfeb, type: 2}
@@ -8610,11 +8605,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 36770d2362719a44abc5b481e13f3978, type: 3}
   m_PrefabInstance: {fileID: 1751831202}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &1751831204 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 36770d2362719a44abc5b481e13f3978, type: 3}
-  m_PrefabInstance: {fileID: 1751831202}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1751831205 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 36770d2362719a44abc5b481e13f3978, type: 3}
@@ -10356,6 +10346,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 28444973354590973, guid: f7c6e709af0e0b741a3a69ab7ab2b7bc, type: 3}
+      propertyPath: m_BlendShapeWeights.Array.data[0]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 28444973354590973, guid: f7c6e709af0e0b741a3a69ab7ab2b7bc, type: 3}
+      propertyPath: m_BlendShapeWeights.Array.data[15]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 28444973354590973, guid: f7c6e709af0e0b741a3a69ab7ab2b7bc, type: 3}
+      propertyPath: m_BlendShapeWeights.Array.data[16]
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1246943574889175108, guid: f7c6e709af0e0b741a3a69ab7ab2b7bc, type: 3}
       propertyPath: m_RootOrder
       value: 13
@@ -10403,6 +10405,10 @@ PrefabInstance:
     - target: {fileID: 1875142588160918270, guid: f7c6e709af0e0b741a3a69ab7ab2b7bc, type: 3}
       propertyPath: m_Name
       value: MinahitoPlayer2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7503453736266099149, guid: f7c6e709af0e0b741a3a69ab7ab2b7bc, type: 3}
+      propertyPath: m_RootOrder
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
