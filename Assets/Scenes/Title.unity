@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &72554134 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 36770d2362719a44abc5b481e13f3978, type: 3}
+  m_PrefabInstance: {fileID: 1069449308}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &150688884
 GameObject:
   m_ObjectHideFlags: 0
@@ -1241,6 +1246,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &878373971 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5653519914247303419, guid: 36770d2362719a44abc5b481e13f3978, type: 3}
+  m_PrefabInstance: {fileID: 1069449308}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &889384894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1793,6 +1803,10 @@ PrefabInstance:
       value: Minahito
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 36770d2362719a44abc5b481e13f3978, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 015fe6c7120f5f44bb686be64eab48d0, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 36770d2362719a44abc5b481e13f3978, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 0
       objectReference: {fileID: 0}
@@ -2006,6 +2020,8 @@ PlayableDirector:
     value: {fileID: 1398169040}
   - key: {fileID: 2524177202398094220, guid: ff14608bf7680b54c832025938610987, type: 2}
     value: {fileID: 1398169040}
+  - key: {fileID: 7886197433789193971, guid: ff14608bf7680b54c832025938610987, type: 2}
+    value: {fileID: 1986593676}
   m_ExposedReferences:
     m_References:
     - fb0e3f109e732184ea430beede842655: {fileID: 537526271}
@@ -2114,6 +2130,27 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 36770d2362719a44abc5b481e13f3978, type: 3}
   m_PrefabInstance: {fileID: 1069449308}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1336965365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72554134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcf4bd25c65225c4ab99f0b9fe9050b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ParamNameDoEyeBlink: DoEyeBlink
+  _ParamNameEyeOpenRatio: EyeOpenRatio
+  _LookTarget: {fileID: 0}
+  _LookAtMode: 0
+  _LookTargetWeight: 0
+  _LookTargetBodyWeight: 0
+  _LookTargetHeadWeight: 0
+  _LookTargetEyesWeight: 0
+  _LookTargetClampWeight: 0
 --- !u!95 &1398169040 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 240ee4eb08ff4d244af365f69e66d4d7, type: 3}
@@ -2869,6 +2906,86 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Asset: {fileID: -944628639613478452, guid: 1706bf728b56cac44927924d4b15fe77, type: 3}
   m_ActionId: 799aae71-7c11-4737-8f54-a8998fe1095d
+--- !u!1 &1986593673 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 240ee4eb08ff4d244af365f69e66d4d7, type: 3}
+  m_PrefabInstance: {fileID: 2092456403}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1986593675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1986593673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcf4bd25c65225c4ab99f0b9fe9050b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ParamNameDoEyeBlink: DoEyeBlink
+  _ParamNameEyeOpenRatio: EyeOpenRatio
+  _LookTarget: {fileID: 0}
+  _LookAtMode: 0
+  _LookTargetWeight: 1
+  _LookTargetBodyWeight: 0
+  _LookTargetHeadWeight: 0.3
+  _LookTargetEyesWeight: 0.1
+  _LookTargetClampWeight: 0
+--- !u!114 &1986593676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1986593673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: d1b35475e6626a3488393112fb039caf, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1986593675}
+          m_TargetAssemblyTypeName: HumanoidAnimatorAssistant, Assembly-CSharp
+          m_MethodName: set_LookTarget
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 878373971}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 1986593675}
+          m_TargetAssemblyTypeName: HumanoidAnimatorAssistant, Assembly-CSharp
+          m_MethodName: set_LeapSpeed
+          m_Mode: 4
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 25
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 1986593675}
+          m_TargetAssemblyTypeName: HumanoidAnimatorAssistant, Assembly-CSharp
+          m_MethodName: SetLookAtModeFromBody
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &2036879784
 GameObject:
   m_ObjectHideFlags: 0
@@ -2964,6 +3081,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Kana
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 240ee4eb08ff4d244af365f69e66d4d7, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 015fe6c7120f5f44bb686be64eab48d0, type: 2}
     - target: {fileID: 5866666021909216657, guid: 240ee4eb08ff4d244af365f69e66d4d7, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 0

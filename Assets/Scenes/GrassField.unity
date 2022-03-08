@@ -750,7 +750,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh26820
+  m_Name: pb_Mesh102808
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -10314,6 +10314,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1858583234, guid: f7c6e709af0e0b741a3a69ab7ab2b7bc, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 28444973354590973, guid: f7c6e709af0e0b741a3a69ab7ab2b7bc, type: 3}
+      propertyPath: m_BlendShapeWeights.Array.data[0]
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1246943574889175108, guid: f7c6e709af0e0b741a3a69ab7ab2b7bc, type: 3}

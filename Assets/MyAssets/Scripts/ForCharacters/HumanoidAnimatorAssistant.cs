@@ -16,48 +16,68 @@ public class HumanoidAnimatorAssistant : MonoBehaviour
 
     [Header("IK用パラメータ")]
     [SerializeField, Tooltip("見るターゲット")]
-    Transform lookTarget = default;
+    Transform _LookTarget = default;
+
+    /// <summary> 見るターゲット座標をゆっくり追いかけるために保管する座標 </summary>
+    Vector3 _LeapLookTargetPotition = Vector3.zero;
+
+    /// <summary> ゆっくり追いかける速さ </summary>
+    float _LeapSpeed = 1f;
+
+    [SerializeField, Tooltip("Look Targetを見るときのモード")]
+    IKLookAtMode _LookAtMode = IKLookAtMode.NoLook;
 
     [SerializeField, Tooltip("どれくらい見るか"), Range(0f, 1f)]
-    float lookTargetWeight = 0;
+    float _LookTargetWeight = 0;
 
     [SerializeField, Tooltip("身体をどれくらい向けるか"), Range(0f, 1f)]
-    float lookTargetBodyWeight = 0;
+    float _LookTargetBodyWeight = 0;
 
     [SerializeField, Tooltip("頭をどれくらい向けるか"), Range(0f, 1f)]
-    float lookTargetHeadWeight = 0;
+    float _LookTargetHeadWeight = 0;
 
     [SerializeField, Tooltip("目をどれくらい向けるか"), Range(0f, 1f)]
-    float lookTargetEyesWeight = 0;
+    float _LookTargetEyesWeight = 0;
 
     [SerializeField, Tooltip("関節の動きをどれくらい制限するか"), Range(0f, 1f)]
-    float lookTargetClampWeight = 0;
+    float _LookTargetClampWeight = 0;
 
     #region プロパティ
-    public Transform LookTarget { set => lookTarget = value; }
-    public float LookTargetWeight { set => lookTargetWeight = value; }
+    public Transform LookTarget { set => _LookTarget = value; }
+    public float LeapSpeed { set => _LeapSpeed = value; }
+    public IKLookAtMode LookAtMode { set => _LookAtMode = value; }
+    public float LookTargetWeight { set => _LookTargetWeight = value; }
     #endregion
 
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
+    }
 
+    void OnEnable()
+    {
         StartCoroutine(BlinkOrder());
     }
 
-    /// <summary>  </summary>
-    /// <param name="animName"></param>
+    /// <summary> アニメーションをスムーズに遷移させる </summary>
+    /// <param name="animName">対応するアニメーション名</param>
     public void PlaySmooth(string animName)
     {
-        animator.Play(animName, -1, 0.7f);
+        animator.Play(animName, -1, 1f);
+    }
+
+    /// <summary> IKを使い指定方向を見る方法を、体からに設定 </summary>
+    public void SetLookAtModeFromBody()
+    {
+        _LookAtMode = IKLookAtMode.FromBody;
     }
 
     /// <summary>
     /// 1秒に一回、瞬きを要求
     /// </summary>
     /// <param name="rate">確率(0～1)</param>
-    IEnumerator BlinkOrder(float rate = 0.2f)
+    IEnumerator BlinkOrder(float rate = 0.5f)
     {
         WaitForSeconds wait1Second = new WaitForSeconds(1f);
         float clampedRate = Mathf.Clamp01(rate);
@@ -65,46 +85,63 @@ public class HumanoidAnimatorAssistant : MonoBehaviour
         while (enabled)
         {
             //確率で瞬きトリガーを立てる
-            if (Random.value < clampedRate) animator.SetTrigger(_ParamNameDoEyeBlink);
+            if (animator && Random.value < clampedRate) animator.SetTrigger(_ParamNameDoEyeBlink);
 
             //1秒待機
             yield return wait1Second;
         }
     }
 
-    /// <summary>IKを用いて指定した方向へ、胴体から向かせる</summary>
-    public void IKLookAtFromBody()
+    void OnAnimatorIK(int layerIndex)
     {
-        //キャラクターの注視方向に関するIKを設定
-        animator.SetLookAtWeight(lookTargetWeight, lookTargetBodyWeight, lookTargetHeadWeight, lookTargetEyesWeight, lookTargetClampWeight);
-        //キャラクターを注視方向へ注目
-        if (lookTarget) animator.SetLookAtPosition(lookTarget.position);
-    }
+        //見るモードによってIKLookAt設定を分岐
+        switch (_LookAtMode)
+        {
+            case IKLookAtMode.FromBody:
+                animator.SetLookAtWeight(_LookTargetWeight, _LookTargetBodyWeight, _LookTargetHeadWeight, _LookTargetEyesWeight, _LookTargetClampWeight);
+                break;
 
-    /// <summary>IKを用いて指定した方向へ、頭から向かせる</summary>
-    public void IKLookAtFromHead()
-    {
-        //キャラクターの注視方向に関するIKを設定
-        animator.SetLookAtWeight(lookTargetWeight, 0f, lookTargetHeadWeight, lookTargetEyesWeight, lookTargetClampWeight);
-        //キャラクターを注視方向へ注目
-        if (lookTarget) animator.SetLookAtPosition(lookTarget.position);
-    }
+            case IKLookAtMode.FromHead:
+                animator.SetLookAtWeight(_LookTargetWeight, 0f, _LookTargetHeadWeight, _LookTargetEyesWeight, _LookTargetClampWeight);
+                break;
 
-    /// <summary>IKを用いて指定した方向へ、目だけ向かせる</summary>
-    public void IKLookAtOnlyEye()
-    {
-        //キャラクターの注視方向に関するIKを設定
-        animator.SetLookAtWeight(lookTargetWeight, 0f, 0f, lookTargetEyesWeight, lookTargetClampWeight);
-        //キャラクターを注視方向へ注目
-        if (lookTarget) animator.SetLookAtPosition(lookTarget.position);
-    }
+            case IKLookAtMode.OnlyHead:
+                animator.SetLookAtWeight(_LookTargetWeight, 0f, _LookTargetHeadWeight, 0f, _LookTargetClampWeight);
+                break;
 
-    /// <summary>IKを用いて指定した方向へ、頭だけ向かせる</summary>
-    public void IKLookAtOnlyHead()
-    {
-        //キャラクターの注視方向に関するIKを設定
-        animator.SetLookAtWeight(lookTargetWeight, 0f, lookTargetHeadWeight, 0f, lookTargetClampWeight);
+            case IKLookAtMode.OnlyEyes:
+                animator.SetLookAtWeight(_LookTargetWeight, 0f, 0f, _LookTargetEyesWeight, _LookTargetClampWeight);
+                break;
+
+            default:
+                animator.SetLookAtWeight(0f, 0f, 0f, 0f, 0f);
+                break;
+
+        }
         //キャラクターを注視方向へ注目
-        if (lookTarget) animator.SetLookAtPosition(lookTarget.position);
+        if (_LookTarget && _LookTargetWeight > 0f)
+        {
+            _LeapLookTargetPotition = Vector3.Lerp(_LeapLookTargetPotition, _LookTarget.position, 1f / _LeapSpeed);
+            animator.SetLookAtPosition(_LeapLookTargetPotition);
+        }
+        else
+        {
+            animator.SetLookAtWeight(0f);
+        }
     }
+}
+
+/// <summary> IKを使い指定方向を見るとき、体のどの位置から見るか </summary>
+public enum IKLookAtMode : byte
+{
+    /// <summary> 見ない </summary>
+    NoLook = 0,
+    /// <summary> 体から </summary>
+    FromBody,
+    /// <summary> 頭から </summary>
+    FromHead,
+    /// <summary> 頭だけ </summary>
+    OnlyHead,
+    /// <summary> 目だけ </summary>
+    OnlyEyes,
 }
