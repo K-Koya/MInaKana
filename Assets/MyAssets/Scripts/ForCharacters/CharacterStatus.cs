@@ -97,13 +97,19 @@ public abstract class CharacterStatus : MonoBehaviour
     /// <summary>
     /// ©ƒLƒƒƒ‰‚ğ‰ñ•œ
     /// </summary>
-    /// <param name="value"></param>
-    /// <param name="ratio"></param>
+    /// <param name="value">‰ñ•œ—Ê</param>
+    /// <param name="ratio">‰ñ•œ—Ê”{—¦</param>
     /// <returns></returns>
-    //public int GaveHeal(int value, float ratio = 1f)
-    //{
+    public int GaveHeal(int value, float ratio = 1f)
+    {
+        //‰ñ•œ—ÊŒvZ
+        int heal = (int)(value * ratio);
 
-    //}
+        //‰ñ•œ—Ê•ª‰ÁZ
+        _HPCurrent = (short)Mathf.Min(_HPInitial, _HPCurrent + heal);
+
+        return heal;
+    }
 
     /// <summary>
     /// ©ƒLƒƒƒ‰‚Éƒ_ƒ[ƒW‚ğ”½‰f

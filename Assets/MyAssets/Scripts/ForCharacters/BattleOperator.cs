@@ -132,6 +132,18 @@ public abstract class BattleOperator : MonoBehaviour
     }
 
     /// <summary>
+    /// 自キャラを回復させ、その値を表示する
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="ratio"></param>
+    public void GaveHeal(int value, float ratio)
+    {
+        //回復量計算をし、回復
+        int heal = _Status.GaveHeal(value, ratio);
+    }
+
+
+    /// <summary>
     /// 自キャラにダメージを受けさせ、その値を表示する
     /// </summary>
     /// <param name="attack"></param>

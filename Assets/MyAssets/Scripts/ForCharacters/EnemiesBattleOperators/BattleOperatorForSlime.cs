@@ -93,7 +93,7 @@ public class BattleOperatorForSlime : BattleOperatorForEnemy
 
         //体当たり攻撃
         _IsCounterattacked = false;
-        _AttackRatio = 0.5f;
+        _AttackRatio = 0.7f;
         sequence = DOTween.Sequence();
         sequence.Append(transform.DOMove(target.BasePosition - (target.transform.forward * 5f), 1f).SetEase(Ease.Linear).OnStart(() => _Animator.Play(_AnimNameRun)));
         sequence.Play().OnUpdate(() =>
@@ -156,7 +156,7 @@ public class BattleOperatorForSlime : BattleOperatorForEnemy
         yield return sequence.WaitForCompletion();
 
         //ジャンプ攻撃して、行動後元の場所へ
-        _AttackRatio = 0.5f;
+        _AttackRatio = 0.7f;
         sequence = DOTween.Sequence();
         sequence.Append(transform.DOJump(target.BasePosition - (target.transform.forward * 5f), 2f, 1, 1f).SetEase(Ease.Linear).OnStart(() => _Animator.Play(_AnimNameJump)));
         sequence.Append(transform.DOMove(_BasePosition - (transform.forward * 5f), 0.05f).SetEase(Ease.INTERNAL_Zero).OnStart(() => _Animator.Play(_AnimNameRun)));
@@ -195,7 +195,7 @@ public class BattleOperatorForSlime : BattleOperatorForEnemy
 
         //中間点を経由して体当たり
         _IsCounterattacked = false;
-        _AttackRatio = 0.5f;
+        _AttackRatio = 0.8f;
         Vector3 wayPoint = Vector3.Lerp(target.BasePosition, other.BasePosition, 0.5f) + target.transform.forward * 2f;
         Vector3 originFoward = transform.forward;
         Sequence sequence = DOTween.Sequence();

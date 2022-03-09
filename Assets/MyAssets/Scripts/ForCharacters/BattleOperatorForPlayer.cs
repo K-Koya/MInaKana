@@ -186,6 +186,7 @@ public class BattleOperatorForPlayer : BattleOperator
 
         /* アイテム */
         _Items.Add(null);
+        _Items.Add(new Command_Item_MagicPowderLv2(HealForPowderLv2));
 
         /* 様子見 */
         _PassCommands.Add(null);
@@ -629,13 +630,16 @@ public class BattleOperatorForPlayer : BattleOperator
     /// </summary>
     /// <param name="targets">対象</param>
     /// <returns></returns>
-    IEnumerator HealForPowder(params BattleOperator[] targets)
+    IEnumerator HealForPowderLv2(params BattleOperator[] targets)
     {
         yield return new WaitForSeconds(0.5f);
+
+        targets.First().GaveHeal(75, 1f);
+
+        yield return new WaitForSeconds(0.5f);
+
         _Status.IsMyTurn = false;
     }
-
-
     #endregion
 }
 
@@ -739,7 +743,7 @@ public class Command_Item_MagicPowderLv2 : CommandBase
         _Name = "癒しの魔法の粉";
         _TargetType = TargetType.Allies;
         _ConsumeValue = 3;
-        _Explain = "HPを最大値の半分だけ回復するぞ";
+        _Explain = "HPを75回復するぞ";
         _IsAcquired = true;
         _IsUsable = true;
         Run = run;
