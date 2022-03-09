@@ -252,4 +252,11 @@ public class BattleManager : MonoBehaviour
             }
         }
     }
+
+    //ƒ^ƒCƒgƒ‹‚Ö
+    public void GoTitle()
+    {
+        _TurnInstructerIterator = null;
+        MySceneManager.I.SceneChange(MySceneManager.I.SceneNameTitle, 1f, LoadSceneEffectType.CircleBlack);
+    }
 }

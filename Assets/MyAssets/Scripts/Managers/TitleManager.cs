@@ -89,6 +89,13 @@ public class TitleManager : MonoBehaviour
             MySceneManager.I.SceneChange(MySceneManager.I.SceneNameGrassField, 1f, LoadSceneEffectType.CircleBlack);
             gameObject.SetActive(false);
         }
+
+        //BGM‚ªI—¹‚·‚ê‚ÎAƒfƒ‚‚ğ‰‚ß‚©‚çÄ¶
+        if (_BGNSpeaker.clip && !_BGNSpeaker.isPlaying)
+        {
+            MySceneManager.I.SceneChange(MySceneManager.I.SceneNameTitle, 1f, LoadSceneEffectType.CircleBlack);
+            gameObject.SetActive(false);
+        }
     }
 
     /// <summary>

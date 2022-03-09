@@ -639,7 +639,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 2.5307693, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -750,7 +750,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh269866
+  m_Name: pb_Mesh277944
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2278,7 +2278,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 2.5307693, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -4657,7 +4657,7 @@ PlayableDirector:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 9a359200a50102540a3d7f8cbc9f3277, type: 2}
+  m_PlayableAsset: {fileID: 11400000, guid: 6021e82792d7de44ead66c1aad0f8c5c, type: 2}
   m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
@@ -4703,6 +4703,10 @@ PlayableDirector:
     value: {fileID: 51120900}
   - key: {fileID: -7293786413601183314, guid: 31f5193ba7034d043bbe5582fbe4dfeb, type: 2}
     value: {fileID: 2012056244}
+  - key: {fileID: 1053350724546418270, guid: 31f5193ba7034d043bbe5582fbe4dfeb, type: 2}
+    value: {fileID: 1200923534}
+  - key: {fileID: 5396856936020443343, guid: 9a359200a50102540a3d7f8cbc9f3277, type: 2}
+    value: {fileID: 1200923534}
   m_ExposedReferences:
     m_References:
     - 3894188cb6e265841b963a24db393649: {fileID: 1658622953}
@@ -5678,7 +5682,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 2.5307693, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -6119,6 +6123,7 @@ GameObject:
   - component: {fileID: 1200923527}
   - component: {fileID: 1200923532}
   - component: {fileID: 1200923533}
+  - component: {fileID: 1200923534}
   m_Layer: 7
   m_Name: BattleStage
   m_TagString: Ground
@@ -6459,6 +6464,36 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1200923534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1200923526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: dc6cae8333985324a863a93943a15069, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1200923532}
+          m_TargetAssemblyTypeName: BattleManager, Assembly-CSharp
+          m_MethodName: GoTitle
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1001 &1218819024
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7951,7 +7986,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 2.5307693, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
