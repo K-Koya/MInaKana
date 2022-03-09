@@ -634,7 +634,7 @@ public class BattleOperatorForPlayer : BattleOperator
     {
         yield return new WaitForSeconds(0.5f);
 
-        targets.First().GaveHeal(75, 1f);
+        targets.First().GaveHeal(50, 1f);
 
         yield return new WaitForSeconds(0.5f);
 
@@ -742,8 +742,8 @@ public class Command_Item_MagicPowderLv2 : CommandBase
     {
         _Name = "–ü‚µ‚Ì–‚–@‚Ì•²";
         _TargetType = TargetType.Allies;
-        _ConsumeValue = 3;
-        _Explain = "HP‚ð75‰ñ•œ‚·‚é‚¼";
+        _ConsumeValue = 99;
+        _Explain = "HP‚ð50‰ñ•œ‚·‚é‚¼";
         _IsAcquired = true;
         _IsUsable = true;
         Run = run;
