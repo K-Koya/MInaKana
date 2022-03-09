@@ -3152,7 +3152,7 @@ MonoBehaviour:
   _IsMyTurn: 0
   _OffsetHeadPoint: 1.2
   _IsDefeated: 0
-  _JumpPower: 15
+  _JumpPower: 12
   _IsGrounded: 0
   _SPInitial: 100
   _SPCurrent: 100
@@ -3171,6 +3171,7 @@ MonoBehaviour:
   _ParamNameDoEyeBlink: DoEyeBlink
   _ParamNameEyeOpenRatio: EyeOpenRatio
   _LookTarget: {fileID: 0}
+  _LookAtMode: 0
   _LookTargetWeight: 0
   _LookTargetBodyWeight: 0
   _LookTargetHeadWeight: 0

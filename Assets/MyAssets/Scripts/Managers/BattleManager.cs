@@ -27,6 +27,7 @@ public enum BattleSituation : byte
 /// <summary>
 /// 戦闘を制御するコンポーネント
 /// </summary>
+[RequireComponent(typeof(AudioSource))]
 public class BattleManager : MonoBehaviour
 {
     #region メンバ
@@ -35,6 +36,9 @@ public class BattleManager : MonoBehaviour
 
     /// <summary> 戦闘の状況 </summary>
     static BattleSituation _Situation = BattleSituation.Introduction;
+
+    /// <summary> BGM再生用のAudioSource </summary>
+    AudioSource _BGNSpeaker = default;
 
     /// <summary> 各戦闘中のキャラクターのステータスへのアクセッサ </summary>
     List<CharacterStatus> _BattleCharacters = default;
@@ -48,6 +52,19 @@ public class BattleManager : MonoBehaviour
     /// <summary> Timelineカットを制御するコンポーネント </summary>
     PlayableDirector _PD = default;
 
+
+    [Header("BGM用のAudioClipメンバー")]
+    [SerializeField, Tooltip("戦闘用BGMをアサイン")]
+    AudioClip _AudioOnBattle = default;
+
+    [SerializeField, Tooltip("勝利用BGMをアサイン")]
+    AudioClip _AudioOnPlayerWin = default;
+
+    [SerializeField, Tooltip("敗北用BGMをアサイン")]
+    AudioClip _AudioOnPlayerLose = default;
+
+
+    [Header("戦闘タイムライン用メンバー")]
     [SerializeField, Tooltip("タイムライン開始時に、非アクティブ化するオブジェクト")]
     GameObject[] onStartDisableObjects = default;
 
@@ -82,7 +99,9 @@ public class BattleManager : MonoBehaviour
     {
         _Situation = BattleSituation.Introduction;
 
+        _BGNSpeaker = GetComponent<AudioSource>();
         _PD = FindObjectOfType<PlayableDirector>();
+
         //戦闘に参加中のキャラクター全員のステータスを取得
         _BattleCharacters = FindObjectsOfType<CharacterStatus>().ToList();
 
@@ -92,6 +111,13 @@ public class BattleManager : MonoBehaviour
 
         //戦闘開始カットを再生
         _PD.Play(_CutForIntroduction);
+
+        //BGM再生
+        if (_AudioOnBattle)
+        {
+            _BGNSpeaker.clip = _AudioOnBattle;
+            _BGNSpeaker.Play();
+        }
     }
 
     // Update is called once per frame
@@ -205,6 +231,12 @@ public class BattleManager : MonoBehaviour
             _Situation = BattleSituation.PlayerLose;
             _PD.Play(_CutForLose);
             GUIPlayersInputNavigation.OrderReset();
+            //BGM再生
+            if (_AudioOnPlayerLose)
+            {
+                _BGNSpeaker.clip = _AudioOnPlayerLose;
+                _BGNSpeaker.Play();
+            }
         }
         //プレイヤーが残っていて敵が一体も残っていない場合勝利
         else if (ActiveCharacters.OfType<EnemyStatus>().ToList().Count < 1)
@@ -212,6 +244,12 @@ public class BattleManager : MonoBehaviour
             _Situation = BattleSituation.PlayerWin;
             _PD.Play(_CutForWin);
             GUIPlayersInputNavigation.OrderReset();
+            //BGM再生
+            if (_AudioOnPlayerWin)
+            {
+                _BGNSpeaker.clip = _AudioOnPlayerWin;
+                _BGNSpeaker.Play();
+            }
         }
     }
 }

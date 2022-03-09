@@ -8,6 +8,13 @@ using DG.Tweening;
 /// </summary>
 public class BattleOperatorForSlime : BattleOperatorForEnemy
 {
+    [Space]
+    [SerializeField, Tooltip("アニメーション名 : 待機時のレアなモーション")]
+    protected string _AnimNameRareStay1 = "RareStay1";
+
+    [SerializeField, Tooltip("アニメーション名 : ジャンプ")]
+    protected string _AnimNameJump = "OnJump";
+
     /// <summary> 行動設定 </summary>
     protected override void OperateCommand()
     {
@@ -33,10 +40,15 @@ public class BattleOperatorForSlime : BattleOperatorForEnemy
                         //プレイヤーが二人
                         case 2:
                             //ランダムで攻撃を選択
-                            if (attackKindRatio > 50)
+                            if (attackKindRatio < 25)
                             {
                                 //どちらかをランダムで攻撃
                                 _RunningCommand = StartCoroutine(BodyAttack(ActivePlayers[Random.Range(0, 2)]));
+                            }
+                            else if(attackKindRatio < 50)
+                            {
+                                //どちらかをランダムでフェイント攻撃
+                                _RunningCommand = StartCoroutine(BodyAttackFake(ActivePlayers[Random.Range(0, 2)]));
                             }
                             else
                             {
@@ -74,16 +86,16 @@ public class BattleOperatorForSlime : BattleOperatorForEnemy
 
         //ターゲット正面に移動して一定時間待機
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(transform.DOMove(target.BasePosition + (target.transform.forward * 3f), 1f).SetEase(Ease.Linear).OnStart(() => _Animator.Play(_AnimNameRun)));
-        sequence.AppendInterval(waitTime).OnStart(() => _Animator.Play(_AnimNameStay));
+        sequence.Append(transform.DOMove(target.BasePosition + (target.transform.forward * 3f), 1f).SetEase(Ease.Linear).OnStart(() => _Animator.Play(_AnimNameRun)).OnStepComplete(() => _Animator.Play(_AnimNameStay)));
+        sequence.AppendInterval(waitTime);
         sequence.Play();
         yield return sequence.WaitForCompletion();
 
         //体当たり攻撃
         _IsCounterattacked = false;
-        _AttackRatio = 0.75f;
+        _AttackRatio = 0.5f;
         sequence = DOTween.Sequence();
-        sequence.Append(transform.DOMove(target.BasePosition - (target.transform.forward * 5f), 0.8f).SetEase(Ease.Linear).OnStart(() => _Animator.Play(_AnimNameRun)));
+        sequence.Append(transform.DOMove(target.BasePosition - (target.transform.forward * 5f), 1f).SetEase(Ease.Linear).OnStart(() => _Animator.Play(_AnimNameRun)));
         sequence.Play().OnUpdate(() =>
         {
             //カウンターを受けたら、DOTweenを切る
@@ -124,6 +136,47 @@ public class BattleOperatorForSlime : BattleOperatorForEnemy
         _Status.IsMyTurn = false;
     }
 
+    /// <summary> 体当たり攻撃、ジャンプしてフェイント </summary>
+    /// <param name="target"> 一人の標的 </param>
+    IEnumerator BodyAttackFake(BattleOperator target)
+    {
+        //ジャンプ回避表示
+        GUIPlayersInputNavigation.JumpOrder(0, true, true);
+
+        //攻撃判定のためコライダー起動
+        _Collider.enabled = true;
+
+        float waitTime = Random.Range(0.5f, 1.5f);
+
+        //ターゲット正面に移動して一定時間待機
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(transform.DOMove(target.BasePosition + (target.transform.forward * 3f), 1f).SetEase(Ease.Linear).OnStart(() => _Animator.Play(_AnimNameRun)).OnStepComplete(() => _Animator.Play(_AnimNameRareStay1)));
+        sequence.AppendInterval(waitTime);
+        sequence.Play();
+        yield return sequence.WaitForCompletion();
+
+        //ジャンプ攻撃して、行動後元の場所へ
+        _AttackRatio = 0.5f;
+        sequence = DOTween.Sequence();
+        sequence.Append(transform.DOJump(target.BasePosition - (target.transform.forward * 5f), 2f, 1, 1f).SetEase(Ease.Linear).OnStart(() => _Animator.Play(_AnimNameJump)));
+        sequence.Append(transform.DOMove(_BasePosition - (transform.forward * 5f), 0.05f).SetEase(Ease.INTERNAL_Zero).OnStart(() => _Animator.Play(_AnimNameRun)));
+        sequence.Append(transform.DOMove(_BasePosition, 0.5f).SetEase(Ease.Linear));
+        sequence.Play();
+        yield return sequence.WaitForCompletion();
+
+        _Animator.Play(_AnimNameStay);
+
+        yield return new WaitForSeconds(0.5f);
+
+        //ジャンプ回避非表示
+        GUIPlayersInputNavigation.JumpOrder();
+
+        //攻撃判定のためコライダー停止
+        _Collider.enabled = false;
+
+        _Status.IsMyTurn = false;
+    }
+
     /// <summary>
     /// こちらに近づいてから対象を選んで体当たり攻撃
     /// </summary>
@@ -132,26 +185,24 @@ public class BattleOperatorForSlime : BattleOperatorForEnemy
     /// <returns></returns>
     IEnumerator SwitchingBodyAttack(BattleOperator target, BattleOperator other)
     {
-        Debug.Log("SwitchingBodyAttack");
-
         //ジャンプ回避表示
         GUIPlayersInputNavigation.JumpOrder(0, true, true);
 
         //反撃判定のためコライダー起動
         _Collider.enabled = true;
 
-
-        float waitTime = Random.Range(0.1f, 1f);
         bool isGaveCounter = false;
 
         //中間点を経由して体当たり
+        _IsCounterattacked = false;
+        _AttackRatio = 0.5f;
         Vector3 wayPoint = Vector3.Lerp(target.BasePosition, other.BasePosition, 0.5f) + target.transform.forward * 2f;
         Vector3 originFoward = transform.forward;
         Sequence sequence = DOTween.Sequence();
         sequence.Append(transform.DOMove(wayPoint, 1f).SetEase(Ease.Linear).OnStart(() => _Animator.Play(_AnimNameRun)));
         sequence.Append(transform.DOLookAt(target.BasePosition, 0.5f).OnStart(() => _Animator.Play(_AnimNameStay)));
         sequence.Append(transform.DOLookAt(wayPoint + originFoward, 0.5f));
-        sequence.Append(transform.DOMove(target.BasePosition, 1f).SetEase(Ease.Linear).OnStart(() => _Animator.Play(_AnimNameRun)));
+        sequence.Append(transform.DOMove(target.BasePosition, 0.5f).SetEase(Ease.Linear).OnStart(() => _Animator.Play(_AnimNameRun)));
         sequence.Append(transform.DOMove(target.BasePosition - (target.transform.forward * 5f), 0.8f).SetEase(Ease.Linear));
         sequence.Play().OnUpdate(() => 
         {

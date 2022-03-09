@@ -219,8 +219,8 @@ public class BattleOperatorForPlayer : BattleOperator
     /// </summary>
     protected override void OperateCommand()
     {
-        //コマンドを確定して実行中でない
-        if (_RunningCommand == null)
+        //コマンドを確定して実行中でない、かつ着地中
+        if (_RunningCommand == null && (_Status as PlayerStatus).IsGrounded)
         {
             //自分のターンが初めて訪れた場合に実行
             if(_IsInitMyTurn)
@@ -624,6 +624,18 @@ public class BattleOperatorForPlayer : BattleOperator
         _Status.IsMyTurn = false;
     }
 
+    /// <summary>
+    /// 回復する魔法の粉を使うシーケンス
+    /// </summary>
+    /// <param name="targets">対象</param>
+    /// <returns></returns>
+    IEnumerator HealForPowder(params BattleOperator[] targets)
+    {
+        yield return new WaitForSeconds(0.5f);
+        _Status.IsMyTurn = false;
+    }
+
+
     #endregion
 }
 
@@ -711,6 +723,23 @@ public class Command_Pass_Abandon : CommandBase
         _TargetType = TargetType.Own;
         _ConsumeValue = 0;
         _Explain = "このターンは何もしないで終わるぞ";
+        _IsAcquired = true;
+        _IsUsable = true;
+        Run = run;
+    }
+}
+
+/// <summary> 回復する魔法の粉コマンド </summary>
+public class Command_Item_MagicPowderLv2 : CommandBase
+{
+    /// <summary> 回復する魔法の粉コマンド </summary>
+    /// <param name="run"> 回復メソッド </param>
+    public Command_Item_MagicPowderLv2(CommandCorotine run)
+    {
+        _Name = "癒しの魔法の粉";
+        _TargetType = TargetType.Allies;
+        _ConsumeValue = 3;
+        _Explain = "HPを最大値の半分だけ回復するぞ";
         _IsAcquired = true;
         _IsUsable = true;
         Run = run;

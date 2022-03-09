@@ -63,14 +63,14 @@ public class GUIManagerForHPSP : MonoBehaviour
         //êîílÇ…ïœâªÇ™Ç†ÇÍÇŒGUIÇ‡çXêV
         if(_BeforeHPCurrent != _HPCurrent)
         {
-            _HPGauge.DOFillAmount(_HPCurrent / (float)_HPInitial, 0.2f);
-            _HPValue.DOText(_HPCurrent + " / " + _HPInitial, 0.2f);
+            _HPGauge.DOFillAmount(_HPCurrent / (float)_HPInitial, 1f);
+            _HPValue.DOText(_HPCurrent + " / " + _HPInitial, 1f);
             _BeforeHPCurrent = _HPCurrent;
         }
         if (_BeforeSPCurrent != _SPCurrent)
         {
-            _SPGauge.DOFillAmount(_SPCurrent / (float)_SPInitial, 0.2f);
-            _SPValue.DOText(_SPCurrent + " / " + _SPInitial, 0.2f);
+            _SPGauge.DOFillAmount(_SPCurrent / (float)_SPInitial, 1f);
+            _SPValue.DOText(_SPCurrent + " / " + _SPInitial, 1f);
             _BeforeSPCurrent = _SPCurrent;
         }
     }

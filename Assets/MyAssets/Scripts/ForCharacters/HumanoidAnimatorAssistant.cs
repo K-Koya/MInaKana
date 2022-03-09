@@ -64,7 +64,7 @@ public class HumanoidAnimatorAssistant : MonoBehaviour
     /// <param name="animName">対応するアニメーション名</param>
     public void PlaySmooth(string animName)
     {
-        animator.Play(animName, -1, 1f);
+        animator.Play(animName, -1, 0.75f);
     }
 
     /// <summary> IKを使い指定方向を見る方法を、体からに設定 </summary>

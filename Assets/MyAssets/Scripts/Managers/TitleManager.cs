@@ -9,6 +9,14 @@ public class TitleManager : MonoBehaviour
     /// <summary> Timelineカットを制御するコンポーネント </summary>
     PlayableDirector _PD = default;
 
+    /// <summary> BGM再生用のAudioSource </summary>
+    AudioSource _BGNSpeaker = default;
+
+    [Header("BGM用AudioClipのアサイン要求")]
+    [SerializeField, Tooltip("タイトルBGMをアサイン")]
+    AudioClip _AudioTitle = default;
+
+
     [Header("Timeline用アサイン要求")]
     [SerializeField, Tooltip("タイムライン開始時に、非アクティブ化するオブジェクト")]
     GameObject[] onStartDisableObjects = default;
@@ -45,10 +53,14 @@ public class TitleManager : MonoBehaviour
     void Start()
     {
         _PD = FindObjectOfType<PlayableDirector>();
+        _BGNSpeaker = GetComponent<AudioSource>();
 
         //カット再生・終了時に実行したいメソッドを定義
         _PD.played += OnStart;
         _PD.stopped += OnEnd;
+
+        _BGNSpeaker.clip = _AudioTitle;
+        _BGNSpeaker.Play();
     }
 
     // Update is called once per frame

@@ -94,6 +94,16 @@ public abstract class CharacterStatus : MonoBehaviour
     public virtual short SPCurrent { get; set; }
     #endregion
 
+    /// <summary>
+    /// 自キャラを回復
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="ratio"></param>
+    /// <returns></returns>
+    //public int GaveHeal(int value, float ratio = 1f)
+    //{
+
+    //}
 
     /// <summary>
     /// 自キャラにダメージを反映
@@ -101,7 +111,7 @@ public abstract class CharacterStatus : MonoBehaviour
     /// <param name="attack"> 攻撃力 </param>
     /// <param name="ratio"> 威力補正 </param>
     /// <returns>ダメージ値</returns>
-    public int GaveDamage(int attack, float ratio)
+    public int GaveDamage(int attack, float ratio = 1f)
     {
         //ダメージ計算(倍率0.95～1.05でダメージ変動あり)
         int damage = (int)(calculateDamage(attack - _Defense) * ratio * Random.Range(0.95f, 1.05f));

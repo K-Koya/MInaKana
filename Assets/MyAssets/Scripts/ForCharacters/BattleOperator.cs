@@ -119,7 +119,7 @@ public abstract class BattleOperator : MonoBehaviour
             OperateCommand();
 
             //”½Œ‚“™‚Å‚â‚ç‚ê‚½‚çƒ^[ƒ“I—¹
-            if (_Status.IsDefeated) _Status.IsMyTurn = false;
+            //if (_Status.IsDefeated) _Status.IsMyTurn = false;
         }
         else
         {
